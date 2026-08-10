@@ -158,6 +158,19 @@ git clone https://github.com/yhbcode000/sustech-slides-template.git
 
 技能用法与安装见 [`skills/README.md`](skills/README.md)（Claude Code / Codex / OMP 三端安装方式、环境变量配置）。
 
+## 🤖 智能体配置推荐 | Recommended Agent Setup
+
+跑通“论文分享 → B站发布”全流程（配合 `skills/` 技能包）的智能体组合：
+
+| 角色 | 推荐 | 说明 |
+|:---|:---|:---|
+| 🎯 主智能体 | **OMP (Oh My Pi) + DeepSeek** | 完整跑通 `paper-to-bilibili` 流水线（技能原生格式、性价比高） |
+| 🔀 选配 | **ChatGPT** | 需要更强推理 / 写作质量时的备选 |
+| 🔀 选配 | **Claude Code** | 长上下文代码 / 文档任务的备选 |
+
+技能包同时兼容 Claude Code / Codex / OMP 三端安装（见 [`skills/README.md`](skills/README.md)），
+但主流程以 **OMP + DeepSeek** 为推荐默认；ChatGPT、Claude Code 按需选用。
+
 ---
 
 ## 🚀 快速开始 | Quick Start
