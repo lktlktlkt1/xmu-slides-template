@@ -212,7 +212,7 @@ latexmk -xelatex main.tex
 
 内置四种方案，`\sustechscheme{<name>}` 切换（`default` 为默认）：
 
-| 用途 | 默认 `default` | 实验室调研 `lab` | B站粉 `bilibili` | 官方B站AI区 `official-bilibili-pink-blue` |
+| 用途 | 🎓 默认 `default` | 🔬 实验室调研 `lab` | 📺 B站粉 `bilibili` | 🎬 官方B站AI区 `official-bilibili-pink-blue` |
 |:---|:---|:---|:---|:---|
 | 🔵 标题栏 / 页框 / 表头底 | 深青蓝 `#2C5F7C` | 复旦红 `#CC1A1A` | 品牌粉 `#FB7299` | 官方蓝 `#0CB6F2` |
 | 🔵 结构线 / Block 标题 | 学术蓝 `#3A6F8C` | 亮红 `#E5002B` | 加深粉 `#E05584` | 加深蓝 `#0A92C2` |
