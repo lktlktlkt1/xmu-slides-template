@@ -126,6 +126,8 @@
 ├── main_template.tex                     # ⭐ 空白起手模板 — 复制为 main.tex
 ├── main_template.pdf                     # 📺 渲染预览
 ├── latexmkrc                             # 自动添加 ./sustech-theme// 到 TEXINPUTS
+├── .gitmodules                           # 子模块声明（skills/）
+├── skills/                               # 📦 论文分享技能包（git submodule）
 ├── .gitignore
 └── sustech-theme/
     ├── beamerthemesustech.sty            # 主主题：Madrid + 配色 + 元素 + Logo
@@ -134,6 +136,27 @@
     └── assets/
         └── sustech_logo.png              # 🏛️ 标题页 Logo
 ```
+
+---
+
+## 🎓 配套技能包 | Skills Submodule
+
+本仓库将 **论文分享 → B 站发布** 技能套件（`paper-to-bilibili` 全流程：arXiv 下载 → MinerU → Beamer 幻灯片 → 讲解视频 → B 站投稿，共 8 个技能）作为 **git 子模块** 挂在 `skills/`，指向 [github.com/yhbcode000/paper-share-skills](https://github.com/yhbcode000/paper-share-skills)。
+
+The paper-to-bilibili skill suite (8 skills) ships as a git submodule at `skills/` (→ [paper-share-skills](https://github.com/yhbcode000/paper-share-skills)). Plain clones skip it — **use a different clone command if you want the skills**:
+
+```bash
+# 🆕 带技能包克隆（推荐）— clone WITH the skills submodule:
+git clone --recurse-submodules https://github.com/yhbcode000/sustech-slides-template.git
+
+# 或：已经克隆过，补拉子模块 — for an existing clone, fetch it later:
+git submodule update --init --recursive
+
+# 不带技能包的普通克隆（仅模板）— plain clone without skills (template only):
+git clone https://github.com/yhbcode000/sustech-slides-template.git
+```
+
+技能用法与安装见 [`skills/README.md`](skills/README.md)（Claude Code / Codex / OMP 三端安装方式、环境变量配置）。
 
 ---
 
