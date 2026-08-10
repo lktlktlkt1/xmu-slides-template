@@ -1,0 +1,31 @@
+name: 🐛 Bug 报告 | Bug Report
+description: 模板编译 / 渲染问题
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: repro
+    attributes:
+      label: 复现步骤 | Reproduction
+      description: 用了哪个模板（main_template / lab_survey / lab_poster）、改了哪些内容、执行了什么编译命令
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: 报错信息 | Error output
+      description: 粘贴 latexmk / xelatex 关键报错（Overfull、Undefined control sequence 等）
+      render: shell
+  - type: input
+    id: env
+    attributes:
+      label: 环境 | Environment
+      description: TeX Live / MiKTeX 版本、操作系统
+      placeholder: "TeX Live 2024 · Windows 11"
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: 排查确认 | Already tried
+      options:
+        - label: 已按 README 使用 latexmk -xelatex 编译
+        - label: 已确认主题路径正确（latexmkrc 生效）

@@ -1,0 +1,19 @@
+name: ✨ 功能建议 | Feature Request
+description: 新配色 / 新宏 / 新模板 / 版式改进
+title: "[Feature] "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: 建议内容 | What
+      description: 想增加什么（如新的 \sustechscheme 配色、新的排版宏、新的场景模板）
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: 使用场景 | Why
+      description: 在什么场景下需要它，最好附效果示意（图片 / 链接）
+    validations:
+      required: true
