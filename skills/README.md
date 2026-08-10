@@ -1,6 +1,6 @@
 # PDF to Bilibili — Skill Suite
 
-6 skills + 1 template for the `paper-to-bilibili` pipeline:
+8 skills + 1 template for the `paper-to-bilibili` pipeline:
 
 ```
 PDF paper → MinerU Markdown → SUSTech Beamer slides → narrated MP4 → Bilibili upload
@@ -82,12 +82,19 @@ export INSTITUTE="Example University, China"
 
 | Skill | Role |
 |-------|------|
+| `paper-download-arxiv-paper-source` | arXiv TeX-source / PDF download (arXiv ID or URL) |
 | `pdf-to-markdown` | PDF → clean Markdown (MinerU, GPU pipeline) |
-| `paper-to-beamer` | Markdown → compiled SUSTech Beamer slides |
-| `pdf-slides-to-video` | PDF slides → narrated MP4 (edge-tts) |
-| `bilibili-video-uploader` | MP4 + metadata → Bilibili upload (biliup) |
-| `pdf-to-bilibili` | Orchestrator: `slides` / `video` / `bilibili` modes |
+| `paper-to-beamer` | Paper / MinerU Markdown / TeX source → compiled SUSTech Beamer slides |
+| `paper-video-cover` | 16:10 video-cover poster (tex/pdf/png) |
+| `paper-slides-to-video` | PDF slides → narrated landscape + portrait MP4 (edge-tts) |
+| `paper-bilibili-uploader` | MP4 + metadata → Bilibili upload (biliup) |
+| `paper-to-bilibili` | Orchestrator: `slides` / `video` / `bilibili` modes + state contract |
 | `sustech-beamer-theme-fix` | Fix stale template copies missing `\setsource` etc. |
+
+Optional companion skills (referenced via `skill://`; provide them or accept degraded behavior):
+`edge-tts-retry-video-driver` / `index-tts-fallback`
+(TTS fallbacks), `sustech-beamer-overflow` (deck overflow rules), `rednote-video-uploader`
+(portrait-video + 小红书 publishing).
 
 ---
 
@@ -122,10 +129,12 @@ python -c "import biliup; print('OK')"
 ```
 <PP_ROOT>/
 +- .omp/skills/                     # OMP install target (or ~/.claude/skills, ~/.codex/skills)
-|   +- pdf-to-bilibili/
+|   +- paper-to-bilibili/
 |   +- paper-to-beamer/
-|   +- pdf-slides-to-video/
-|   +- bilibili-video-uploader/
+|   +- paper-video-cover/
+|   +- paper-slides-to-video/
+|   +- paper-bilibili-uploader/
+|   +- paper-download-arxiv-paper-source/
 |   +- pdf-to-markdown/
 |   +- sustech-beamer-theme-fix/
 +- sustech-slides-template/         # this repository (template checkout)
