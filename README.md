@@ -2,7 +2,7 @@
 
 **学术报告 · 论文分享 · 课题答辩一站式中英文 LaTeX Beamer 模板**
 
-> 🚀 GitHub 仓库：[**yhbcode000/sustech-slides-template**](https://github.com/yhbcode000/sustech-slides-template) — 欢迎 Star / Fork / Issue
+🚀 GitHub 仓库：[**yhbcode000/sustech-slides-template**](https://github.com/yhbcode000/sustech-slides-template) · 技能包 [**yhbcode000/paper-share-skills**](https://github.com/yhbcode000/paper-share-skills) — 欢迎 Star / Fork / Issue
 
 > 基于标准 Madrid 主题，采用低饱和度学术配色重新设计。附带即用型幻灯片模板、内置标题页 Logo 及 `latexmkrc`，**无需系统安装**即可编译。
 
