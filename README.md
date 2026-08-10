@@ -330,6 +330,18 @@ latexmk -xelatex main.tex
 
 ---
 
+## 💬 交流讨论 | Community
+
+欢迎加入 QQ 群 **白拾的小屋**（群号 `750365700`）技术交流群：
+
+> 本群主要交流 **物理 AI、具身智能、机器人、智能体、世界模型、AI 产品、科研及创业**。欢迎讨论、求助、分享项目，也可以轻松聊天摸鱼。
+
+<div align="center">
+<img src="image.png" width="220" alt="白拾的小屋 QQ 群二维码 · 群号 750365700" />
+</div>
+
+---
+
 ## 📜 许可 | License
 
 [Apache License 2.0](LICENSE) © 2026 杨昊波 (Haobo Yang)
