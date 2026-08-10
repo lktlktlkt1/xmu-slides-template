@@ -276,6 +276,11 @@ latexmk -xelatex main.tex
 \sustechscheme{lab}                        % 实验室调研：复旦红 + 宝石红 + 香槟金
 \sustechscheme{default}                    % 恢复默认
 
+% 标题页出处脚注（默认显示：B站频道 · GitHub 仓库；汇报/答辩可关）：
+\hidecredits                              % 关闭出处脚注（汇报需要时）
+\showcredits                              % 重新显示（默认）
+\setcreditline{哔哩哔哩 · 白拾的物理AI组会 · github.com/yhbcode000/sustech-slides-template}  % 自定义出处
+
 % 作者信息宏（已定义，不自动渲染 — 自行放置）：
 \setcreditauthor{Your Name}
 \setcreditgithub{github.com/you}
