@@ -330,5 +330,8 @@ latexmk -xelatex main.tex
 
 ## 📜 许可 | License
 
-[MIT](LICENSE) © 2026 杨昊波 (Haobo Yang)
+> 本仓库代码与技能文档以 **Apache-2.0** 协议开源：可自由使用、修改、分发（含商用），须保留版权声明与许可文本；衍生作品须注明修改并继续沿用 Apache-2.0。
+> 附带的 SUSTech 主题（`paper-to-beamer` 内嵌模板）沿用其原始署名约定，欢迎自由使用与修改，保留主题作者署名即可。
+
+© 2026 杨昊波 (Haobo Yang) — 详见 [LICENSE](LICENSE)
 
