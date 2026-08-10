@@ -287,6 +287,24 @@ latexmk -xelatex main.tex
 \setcreditemail{you@example.com}
 ```
 
+### 📌 移除标题页出处脚注 | Removing the title-page credit line
+
+标题页底部小字出处（`哔哩哔哩 · 白拾的物理AI组会 · github.com/yhbcode000/sustech-slides-template`）默认显示，三种移除方式：
+
+| 方式 | 做法 | 效果 |
+|:---|:---|:---|
+| 1️⃣ 汇报时关闭（推荐） | 在 `main.tex` 导言区加 `\hidecredits` | 仅当前文稿隐藏，主题仍保留开关 |
+| 2️⃣ 清空文案 | 导言区加 `\setcreditline{}` | 隐藏文字，开关逻辑保留 |
+| 3️⃣ 彻底移除 | 编辑 `sustech-theme/beamerthemesustech.sty`：删除默认行 `\setcreditline{哔哩哔哩 …}` 与标题页模板里的 `\ifshowcredits … \fi` 渲染块 | 改主题源码，所有文稿不再出现 |
+
+方式 1 只需一行，适合正式汇报 / 答辩：
+
+```latex
+\documentclass[aspectratio=1610,10pt]{ctexbeamer}
+\usetheme{sustech}
+\hidecredits                    % ← 关闭标题页出处脚注
+```
+
 ---
 
 ## 📦 依赖 | Requirements
