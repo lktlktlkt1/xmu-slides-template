@@ -589,7 +589,7 @@ def render_slides(pdf_path: str, output_dir: str, dpi: int = 200) -> list:
 def generate_cover(png_path: str, output_path: str, poster_path: str = None) -> str:
     """Create cover image directly from first slide PNG (no scaling).
 
-    Poster generation is handled separately by markdown-to-video-cover skill.
+    Optional poster generation is handled separately by other skills.
     Cover is always the raw first slide for Bilibili upload.
     """
     import shutil

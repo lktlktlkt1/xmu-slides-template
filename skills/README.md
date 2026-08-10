@@ -1,6 +1,6 @@
 # PDF to Bilibili — Skill Suite
 
-7 skills + 1 template for the `paper-to-bilibili` pipeline:
+6 skills + 1 template for the `paper-to-bilibili` pipeline:
 
 ```
 PDF paper → MinerU Markdown → SUSTech Beamer slides → narrated MP4 → Bilibili upload
@@ -84,7 +84,6 @@ export INSTITUTE="Example University, China"
 |-------|------|
 | `pdf-to-markdown` | PDF → clean Markdown (MinerU, GPU pipeline) |
 | `paper-to-beamer` | Markdown → compiled SUSTech Beamer slides |
-| `markdown-to-video-cover` | 16:10 video-cover poster (tex/pdf/png) |
 | `pdf-slides-to-video` | PDF slides → narrated MP4 (edge-tts) |
 | `bilibili-video-uploader` | MP4 + metadata → Bilibili upload (biliup) |
 | `pdf-to-bilibili` | Orchestrator: `slides` / `video` / `bilibili` modes |
@@ -125,7 +124,6 @@ python -c "import biliup; print('OK')"
 +- .omp/skills/                     # OMP install target (or ~/.claude/skills, ~/.codex/skills)
 |   +- pdf-to-bilibili/
 |   +- paper-to-beamer/
-|   +- markdown-to-video-cover/
 |   +- pdf-slides-to-video/
 |   +- bilibili-video-uploader/
 |   +- pdf-to-markdown/

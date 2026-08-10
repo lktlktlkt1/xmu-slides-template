@@ -234,7 +234,7 @@ Produces H.264 1920x1200 with black letterbox padding (any source aspect ratio -
 ## Phase 8 — Generate cover image
 
 Cover is always the raw first slide PNG (no scaling, no letterbox). Poster generation
-happens separately via `markdown-to-video-cover`; it is not used for the upload cover.
+is optional and handled separately; it is not used for the upload cover.
 
 ```bash
 # cwd: $PP_ROOT

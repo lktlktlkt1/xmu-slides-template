@@ -179,21 +179,11 @@ This is a silent bug — video assembles without error but appendix A plays appe
 
 ---
 
-## Phase 4a.5 — Generate poster (if md_output exists)
+## Phase 4a.5 — Cover image
 
-Only for `video` and `bilibili` modes. If the paper has `md_output/`, run the
-markdown-to-video-cover skill to produce `poster/poster.png`. The video pipeline's
-cover generator will automatically use this poster when available.
-
-```bash
-ls "$PP_ROOT/论文分享/<DIR_NAME>/md_output/" && (
-  echo '{"cards_col1":[],"cards_col2":[],"title_font":100}' > _cover.json
-  python \
-    <SKILLS_DIR>/markdown-to-video-cover/scripts/generate_poster.py \
-    "$PP_ROOT/论文分享/<DIR_NAME>" --data _cover.json
-  rm _cover.json
-) || echo "No md_output, skipping poster"
-```
+Only for `video` and `bilibili` modes. The upload cover (`video/cover.png`) is
+produced by the video pipeline from the first slide — see `generate_cover` in
+pdf-slides-to-video (Phase 7). No separate poster step is needed.
 
 ---
 

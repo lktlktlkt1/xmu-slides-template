@@ -229,7 +229,7 @@ def _find_or_generate_cover(paper_dir: str, video_dir: Path, meta: dict) -> str:
     if cover_path and os.path.exists(cover_path):
         return cover_path
 
-    # Fallback: use poster from markdown-to-video-cover skill
+    # Fallback: use poster (e.g. from a poster-generation skill)
     poster_png = Path(paper_dir) / "poster" / "poster.png"
     if poster_png.exists():
         print(f"Found poster ({poster_png.stat().st_size // 1024}KB), generating cover...")

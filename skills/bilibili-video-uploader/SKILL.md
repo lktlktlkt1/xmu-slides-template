@@ -87,7 +87,7 @@ Accept `$ARGUMENTS` — a paper directory matching the `pdf-slides-to-video` lay
     cover.png               # 1920x1200 cover (optional: auto-generated from poster)
     video_meta.json         # Bilibili metadata
   poster/
-    poster.png              # from markdown-to-video-cover skill (auto-resized as cover)
+    poster.png              # optional — from any poster skill (auto-resized as cover)
 ```
 
 The CLI wrapper (`scripts/upload.py`) handles all resolution automatically.
