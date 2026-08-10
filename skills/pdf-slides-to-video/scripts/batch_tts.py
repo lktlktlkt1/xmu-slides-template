@@ -1,5 +1,5 @@
 """Batch TTS with retry — scan a frame_dir for slide_*.txt files, generate MP3s using edge-tts.
-Usage: py batch_tts.py <frame_dir> [--max-workers 8] [--max-retries 3]
+Usage: python batch_tts.py <frame_dir> [--max-workers 8] [--max-retries 3]
 """
 import sys, os, glob, time, argparse
 from concurrent.futures import ThreadPoolExecutor, as_completed

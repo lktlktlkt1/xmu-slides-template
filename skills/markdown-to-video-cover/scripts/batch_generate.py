@@ -2,7 +2,7 @@
 """Batch run generate_poster.py for a slice of paper directories."""
 import sys, os, subprocess
 
-PYTHON = r"C:/Users/disco/AppData/Local/Programs/Python/Python310/python.exe"
+PYTHON = sys.executable  # spawn generate_poster.py with the same interpreter
 GENERATOR = os.path.join(os.path.dirname(__file__), "generate_poster.py")
 
 def main():

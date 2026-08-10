@@ -39,11 +39,11 @@ the narrated MP4, `cover.png`, and `video_meta.json` for Bilibili upload.
    Start-Process powershell -Verb RunAs -ArgumentList '-NoProfile -Command "choco install ffmpeg -y"'
    ```
 
-2. Check edge-tts: `py -c "import edge_tts"`. If missing: `py -m pip install edge-tts`
+2. Check edge-tts: `python -c "import edge_tts"`. If missing: `python -m pip install edge-tts`
 
-3. Verify `pdftoppm`: `C:\texlive\2024\bin\windows\pdftoppm.exe`
+3. Verify `pdftoppm`: `pdftoppm -v` (override with env `POPPLER_DIR`)
 
-4. Verify Python packages: `fitz` (PyMuPDF), `pdf2image`, `PIL` (Pillow) — all pre-installed.
+4. Verify Python packages: `fitz` (PyMuPDF), `pdf2image`, `PIL` (Pillow) — if missing, install with `python -m pip install pymupdf pdf2image pillow`.
 ## Phase 2 — Resolve input
 
 1. Accept `$ARGUMENTS` — a paper directory containing `slides-beamer/main.tex` + `main.pdf`.
@@ -62,9 +62,9 @@ the narrated MP4, `cover.png`, and `video_meta.json` for Bilibili upload.
 ## Phase 3 — Extract slides to images
 
 ```bash
-# cwd: D:\Envs\Paper_Survey_Env
-py -c "
-import sys; sys.path.insert(0, r'.omp\skills\pdf-slides-to-video\scripts')
+# cwd: $PP_ROOT
+python -c "
+import sys; sys.path.insert(0, r'<SKILLS_DIR>\pdf-slides-to-video\scripts')
 from slides_to_video import render_slides
 paths = render_slides(r'<PDF_PATH>', r'<FRAME_DIR>', dpi=200)
 print(f'Rendered {len(paths)} slides')
@@ -80,11 +80,11 @@ then **directly write** Chinese narration as `% NARRATION:` comments after each 
 **Do NOT use `completion()`** — write narrations yourself from paper knowledge.
 
 ```bash
-# cwd: D:\Envs\Paper_Survey_Env
+# cwd: $PP_ROOT
 # 1. Parse frames to understand slide content
-py -c "
+python -c "
 import sys, json
-sys.path.insert(0, r'.omp\skills\pdf-slides-to-video\scripts')
+sys.path.insert(0, r'<SKILLS_DIR>\pdf-slides-to-video\scripts')
 from slides_to_video import parse_beamer_frames, parse_beamer_preamble
 preamble = parse_beamer_preamble(r'<TEX_PATH>')
 frames = parse_beamer_frames(r'<TEX_PATH>')
@@ -105,7 +105,7 @@ cp "<TEX_PATH>" "<VIDEO_DIR>/main_with_narration.tex"
 4. For each frame, write a Chinese narration **directly into the .tex file** as `% NARRATION: <text>` on the line after `\end{frame}`.
 
 **Narration rules** (audio-only audience, self-contained):
-+- OUTPUT: 简体中文. English technical terms (MT3, BC, alignment, open-loop replay, etc.) kept inline.
++- OUTPUT: 简体中文. English technical terms (BC, alignment, open-loop replay, etc.) kept inline.
 +- NEVER say "这一页/如图所示/本页" — listener cannot see slides.
 +- Expand bullet points into complete explanatory sentences.
 +- Figure slides: describe sub-panels, axes, trends, numbers — translate English markdown captions into Chinese.
@@ -120,8 +120,8 @@ Extract figure captions and surrounding paragraphs for each figure slide — sub
    This is a silent bug — video assembles without error but appendix A plays appendix B's audio.
 
    ```bash
-   py -c "
-   import sys; sys.path.insert(0, r'.omp\skills\pdf-slides-to-video\scripts')
+   python -c "
+   import sys; sys.path.insert(0, r'<SKILLS_DIR>\pdf-slides-to-video\scripts')
    from slides_to_video import parse_beamer_frames
    frames = parse_beamer_frames(r'<TEX_PATH>')
    with open(r'<VIDEO_DIR>/main_with_narration.tex', 'r', encoding='utf-8') as f:
@@ -142,10 +142,10 @@ at the CORRECT PDF page positions. The `extract_narrations_from_tex` function no
 Section divider pages from `\AtBeginSection` are accounted for by `get_page_plan()`.
 
 ```bash
-# cwd: D:\Envs\Paper_Survey_Env
-py -c "
+# cwd: $PP_ROOT
+python -c "
 import sys, json
-sys.path.insert(0, r'.omp\skills\pdf-slides-to-video\scripts')
+sys.path.insert(0, r'<SKILLS_DIR>\pdf-slides-to-video\scripts')
 from slides_to_video import extract_narrations_from_tex, write_narrations_to_files
 
 orig_tex = r'<TEX_PATH>'
@@ -180,11 +180,11 @@ Run all slides in parallel with `ThreadPoolExecutor` — each edge-tts call is I
 **Parallel TTS** (8 workers, ~3× speedup vs sequential):
 
 ```bash
-# cwd: D:\Envs\Paper_Survey_Env
-py -c "
+# cwd: $PP_ROOT
+python -c "
 import sys, os
 from concurrent.futures import ThreadPoolExecutor, as_completed
-sys.path.insert(0, r'.omp\skills\pdf-slides-to-video\scripts')
+sys.path.insert(0, r'<SKILLS_DIR>\pdf-slides-to-video\scripts')
 from slides_to_video import tts_slide
 frame_dir = r'<FRAME_DIR>'
 tasks = []
@@ -216,10 +216,10 @@ If any slide produces 0-byte MP3, re-run that single slide sequentially.
 Parallel ffmpeg encode of all slides, then concatenate. `max_workers` should match your CPU cores (default 8).
 
 ```bash
-# cwd: D:\Envs\Paper_Survey_Env
-py -c "
+# cwd: $PP_ROOT
+python -c "
 import sys, os
-sys.path.insert(0, r'D:\Envs\Paper_Survey_Env\.omp\skills\pdf-slides-to-video\scripts')
+sys.path.insert(0, r'<SKILLS_DIR>\pdf-slides-to-video\scripts')
 from slides_to_video import assemble_video
 assemble_video(
     r'<FRAME_DIR>',
@@ -237,10 +237,10 @@ Cover is always the raw first slide PNG (no scaling, no letterbox). Poster gener
 happens separately via `markdown-to-video-cover`; it is not used for the upload cover.
 
 ```bash
-# cwd: D:\Envs\Paper_Survey_Env
-py -c "
+# cwd: $PP_ROOT
+python -c "
 import sys, os
-sys.path.insert(0, r'.omp\skills\pdf-slides-to-video\scripts')
+sys.path.insert(0, r'<SKILLS_DIR>\pdf-slides-to-video\scripts')
 from slides_to_video import generate_cover
 cover = generate_cover(r'<FRAME_DIR>/slide_001.png', r'<VIDEO_DIR>/cover.png')
 print(f'Cover: {cover} (raw first slide)')
@@ -249,10 +249,10 @@ print(f'Cover: {cover} (raw first slide)')
 ## Phase 9 — Generate Bilibili metadata
 
 ```bash
-# cwd: D:\Envs\Paper_Survey_Env
-py -c "
+# cwd: $PP_ROOT
+python -c "
 import sys, json
-sys.path.insert(0, r'D:\Envs\Paper_Survey_Env\.omp\skills\pdf-slides-to-video\scripts')
+sys.path.insert(0, r'<SKILLS_DIR>\pdf-slides-to-video\scripts')
 from slides_to_video import parse_beamer_preamble, parse_beamer_frames, generate_metadata
 preamble = parse_beamer_preamble(r'<TEX_PATH>')
 frames = parse_beamer_frames(r'<TEX_PATH>')
@@ -271,7 +271,7 @@ After generating `video_meta.json`, upload using the `bilibili-video-uploader` s
 (Python biliup v1.2.1, `--submit web`):
 
 ```bash
-py "D:/Envs/Paper_Survey_Env/.omp/skills/bilibili-video-uploader/scripts/upload.py" "<PAPER_DIR>"
+python "<SKILLS_DIR>/bilibili-video-uploader/scripts/upload.py" "<PAPER_DIR>"
 ```
 
 See `skill://bilibili-video-uploader` for login, metadata finalization, and error handling.
@@ -300,7 +300,7 @@ All slides get narration — no silent slides. Different strategies per slide ty
 | Closing | 1 | 20-40 | Thank audience, summarize key takeaway, invite questions |
 
 Rules:
-- OUTPUT: 简体中文. English technical terms (MT3, BC, alignment, open-loop replay, pose estimation, etc.) kept inline — do NOT translate.
+- OUTPUT: 简体中文. English technical terms (BC, alignment, open-loop replay, pose estimation, etc.) kept inline — do NOT translate.
 - Self-contained: NEVER reference "this slide", "如图所示", "这一页" — listener cannot see slides.
 - Expand bullets into complete explanatory sentences; never just list items.
 - Figure slides: use markdown figure captions for rich descriptions — sub-panels (A, B, C...), axes labels, trends, percentages.

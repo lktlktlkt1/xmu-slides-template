@@ -8,7 +8,7 @@ user-invocable: true
 
 Converts PDFs to clean, structure-preserving Markdown using **MinerU**
 (`opendatalab/MinerU`), the highest-fidelity open-source engine for academic
-papers. Runs the **pipeline backend on the GPU** (CUDA / RTX 4090). Output keeps
+papers. Runs the **pipeline backend on the GPU** (CUDA). Output keeps
 heading hierarchy, inline LaTeX math (`$...$`), figures, and tables (as HTML).
 
 ## When to use
@@ -26,8 +26,8 @@ MinerU lives in a dedicated isolated env and is driven through the bundled
 > that returns `502 Bad Gateway` on Windows. The wrapper bypasses that.
 
 ```
-"C:\Users\disco\.mineru-env\Scripts\python.exe" \
-  "C:\Users\disco\.omp\skills\pdf-to-markdown\convert.py" \
+"$MINERU_PYTHON" \
+  "<SKILLS_DIR>/pdf-to-markdown/convert.py" \
   "<input.pdf>" "<output_dir>" --lang en
 
 - Arg 1 — input file (pdf/image/docx/pptx/xlsx).
@@ -55,17 +55,20 @@ MinerU lives in a dedicated isolated env and is driven through the bundled
 
 ## Preflight / setup (only if something is missing)
 
-- Env CLI/python: `C:\Users\disco\.mineru-env\Scripts\python.exe`
-- Verify CUDA: `...\python.exe -c "import torch;print(torch.cuda.is_available())"` → `True`.
-- Models are pre-downloaded to `C:\Users\disco\.cache\huggingface\hub\` (one-time).
+- Interpreter with MinerU (env `MINERU_PYTHON`, default `python`).
+- Verify CUDA: `$MINERU_PYTHON -c "import torch; print(torch.cuda.is_available())"` → `True`.
+- Models are pre-downloaded to `~/.cache/huggingface/hub/` (one-time).
 
-If the env is missing, recreate it (uv is already installed):
+If the env is missing, recreate it (install `uv` first if needed):
 ```
-uv venv --python 3.12 "C:\Users\disco\.mineru-env"
-uv pip install --python "C:\Users\disco\.mineru-env\Scripts\python.exe" torch torchvision --index-url https://download.pytorch.org/whl/cu124
-uv pip install --python "C:\Users\disco\.mineru-env\Scripts\python.exe" -U "mineru[core]"
-"C:\Users\disco\.mineru-env\Scripts\mineru-models-download.exe" -s huggingface -m pipeline
+uv venv --python 3.12 "<your-env>"
+uv pip install --python "<your-env>/Scripts/python.exe" torch torchvision --index-url https://download.pytorch.org/whl/cu124
+uv pip install --python "<your-env>/Scripts/python.exe" -U "mineru[core]"
+"<your-env>/Scripts/mineru-models-download.exe" -s huggingface -m pipeline
 ```
+Then set `MINERU_PYTHON` to `<your-env>/Scripts/python.exe` (Windows) or
+`<your-env>/bin/python` (macOS/Linux). On macOS/Linux the models-download binary is
+`mineru-models-download` (no `.exe` suffix).
 
 ## Troubleshooting
 - **`cuda.is_available()` is False** → reinstall torch from the `cu124` index (see setup).
@@ -81,6 +84,6 @@ For non-paper files where layout fidelity doesn't matter, Microsoft's **MarkItDo
 is faster and simpler — but it mangles academic two-column PDFs and tables, so prefer
 MinerU for papers:
 ```
-uv pip install --python "C:\Users\disco\.mineru-env\Scripts\python.exe" markitdown
-"C:\Users\disco\.mineru-env\Scripts\python.exe" -m markitdown "<input>" > out.md
+"$MINERU_PYTHON" -m pip install markitdown
+"$MINERU_PYTHON" -m markitdown "<input>" > out.md
 ```

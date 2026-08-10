@@ -23,7 +23,7 @@ macros and no section-separator pages.
 vertical space for dense content.
 
 **Bash runtime**: All shell commands run under the session's `bash` tool,
-which on this Windows system is Git Bash. Unix-style `rm -rf`, `cp -r`,
+which is Git Bash on Windows systems. Unix-style `rm -rf`, `cp -r`,
 `mkdir -p` are available. Working directory is set per-block via `cwd`.
 
 ---
@@ -35,8 +35,8 @@ which on this Windows system is Git Bash. Unix-style `rm -rf`, `cp -r`,
    - Strip `.pdf`, replace spaces/hyphens/special chars.
    - Ask the user for the name if venue/title are not inferrable from the
      filename.
-   - Convention: existing examples are `SCIENCE ROBOTICS - HIL SERL`,
-     `SCIENCE ROBOTICS - MT3`.
+   - Convention: existing examples are `AAAI 2026 - PSN-IRT`,
+     `CVPR 2025 - GROVE`.
 3. Create `论文分享/<DIR_NAME>/` and copy the PDF there.
 
 ---
@@ -46,8 +46,8 @@ which on this Windows system is Git Bash. Unix-style `rm -rf`, `cp -r`,
 Run MinerU in-process on CUDA via the existing convert wrapper:
 
 ```
-"C:\Users\disco\.mineru-env\Scripts\python.exe" \
-  "C:\Users\disco\.claude\skills\pdf-to-markdown\convert.py" \
+"$MINERU_PYTHON" \
+  "<SKILLS_DIR>/pdf-to-markdown/convert.py" \
   "论文分享/<DIR_NAME>/<pdf_filename>.pdf" \
   "论文分享/<DIR_NAME>/md_output" \
   --lang en
@@ -65,7 +65,7 @@ If MinerU env is missing, stop and tell the user to install it per the
 ## Phase 3 — Clone template
 
 ```bash
-# cwd: D:\Envs\Paper_Survey_Env
+# cwd: $PP_ROOT
 git clone --depth 1 https://github.com/yhbcode000/sustech-slides-template.git \
   "论文分享/<DIR_NAME>/slides-template"
 rm -rf "论文分享/<DIR_NAME>/slides-template/.git"
@@ -74,15 +74,14 @@ rm -rf "论文分享/<DIR_NAME>/slides-template/.git"
 This gives the pristine `main_template.tex` + `sustech-theme/` + `latexmkrc`.
 
 **Fallback if `git clone` fails (network)**: copy `sustech-theme/` +
-`latexmkrc` + `main_template.tex` from an existing paper directory
-(e.g. `论文分享/SCIENCE ROBOTICS - HIL SERL/slides-template/`).
+`latexmkrc` + `main_template.tex` from `<TEMPLATE_DIR>`.
 
 ---
 
 ## Phase 4 — Create working dir and copy essentials
 
 ```bash
-# cwd: D:\Envs\Paper_Survey_Env
+# cwd: $PP_ROOT
 mkdir -p "论文分享/<DIR_NAME>/slides-beamer"
 cp -r "论文分享/<DIR_NAME>/slides-template/sustech-theme" \
   "论文分享/<DIR_NAME>/slides-beamer/"
@@ -124,8 +123,8 @@ Read `md_output/<name>/auto/<name>.md`. Extract these data points:
 then edit it section by section to replace every `\ph{…}` placeholder and
 `\phfig` with real content from the Markdown.
 
-Use the **HIL SERL example** as a filled-in style reference:
-`论文分享/SCIENCE ROBOTICS - HIL SERL/slides-beamer/main.tex`.
+Use `<TEMPLATE_DIR>/main_template.tex` (this repository's template) as the
+style reference.
 
 ### 6.0 Preamble metadata
 
@@ -133,9 +132,9 @@ Target the `\title`, `\subtitle`, `\author`, `\institute`, `\date` macros:
 
 - `\title[\ph{短标题}]{…}` → `\title[Short Title]{Full Paper Title}`
 - `\subtitle{…}` → paper subtitle; set `\subtitle{}` if none
-- `\author[\ph{汇报人}]{…}` → presenter name (ask user or default to "Haobo Yang")
-- `\institute[机构]{…}` → `SUSTech, China \textperiodcentered\ <venue>, <year>`
-- `\date{2026-MM-DD \textperiodcentered\ Singapore}` → current date and location
+- `\author[\ph{汇报人}]{…}` → presenter name: ask the user; fallback `$PRESENTER`
+- `\institute[机构]{…}` → `$INSTITUTE \textperiodcentered\ <venue>, <year>` (ask the user if unset; example "SUSTech, China")
+- `\date{YYYY-MM-DD \textperiodcentered\ <location>}` → current date and venue location
 
 Delete the placeholder-helper macros `\ph` and `\phfig` — they're no longer needed.
 
@@ -305,12 +304,12 @@ Note this in the Phase 8 report so the user knows to source the figure manually.
 ## Phase 7 — Compile
 
 ```bash
-# cwd: D:\Envs\Paper_Survey_Env\论文分享\<DIR_NAME>\slides-beamer
+# cwd: $PP_ROOT/论文分享/<DIR_NAME>/slides-beamer
 latexmk -xelatex main.tex
 ```
 
 On success: copy `main.pdf` → `../<DIR_NAME>.pdf` at the paper dir root
-(matching the HIL SERL convention).
+(matching the repo convention).
 
 Post-compile checks (use the **built-in `grep` tool**, not shell `grep`):
 
@@ -328,14 +327,14 @@ still uses the default "arXiv" prefix.
 
 **Extract venue** from the compiled `.tex` preamble:
 ```bash
-py -c "
+python -c "
 import re, os
 tex = r'<PAPER_DIR>/slides-beamer/main.tex'
 with open(tex, 'r', encoding='utf-8') as f:
     content = f.read()
 - If extracted venue differs from current dir prefix (e.g. "arXiv" → "ICRA 2026"):
   ```bash
-  mv "<PAPER_DIR>" "D:/Envs/Paper_Survey_Env/论文分享/<NEW_VENUE> - <SHORT_TITLE>"
+  mv "<PAPER_DIR>" "$PP_ROOT/论文分享/<NEW_VENUE> - <SHORT_TITLE>"
   ```
 - Also rename `<DIR_NAME>.pdf` at the paper dir root to match.
 - **Short title must be recognizable**: use the paper's well-known acronym

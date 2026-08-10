@@ -16,10 +16,9 @@ Given a paper directory containing `video/` (output of `pdf-slides-to-video`),
 upload the narrated MP4 to Bilibili using `biliup` Python CLI (v1.2.1+), which
 replaces the archived biliup-rs v0.2.4.
 
-**Python**: ALWAYS use the direct path on this machine — `py` routes through broken WSL:
-`C:/Users/disco/AppData/Local/Programs/Python/Python310/python.exe`
+**Python**: `python` (Python 3.10+; if `python` is missing use `py -3`)
 **Cookie store**: `%USERPROFILE%\.bilibili\cookies.json`
-**CLI wrapper**: `.omp/skills/bilibili-video-uploader/scripts/upload.py` — always use this script for uploads.
+**CLI wrapper**: `<SKILLS_DIR>/bilibili-video-uploader/scripts/upload.py` — always use this script for uploads.
 
 ---
 
@@ -32,7 +31,7 @@ error, or if you suspect a stuck biliup daemon, use the diagnostic and recovery 
 ### Diagnose
 
 ```bash
-py "D:/Envs/Paper_Survey_Env/.omp/skills/bilibili-video-uploader/scripts/upload.py" --diagnose
+python "<SKILLS_DIR>/bilibili-video-uploader/scripts/upload.py" --diagnose
 ```
 
 This reports:
@@ -44,7 +43,7 @@ This reports:
 ### Kill all biliup processes and clean locks
 
 ```bash
-py "D:/Envs/Paper_Survey_Env/.omp/skills/bilibili-video-uploader/scripts/upload.py" --kill-all
+python "<SKILLS_DIR>/bilibili-video-uploader/scripts/upload.py" --kill-all
 ```
 
 Prompts for confirmation before killing processes and removing stale lock files.
@@ -60,11 +59,11 @@ Use `--kill-all --force` to skip the confirmation prompt.
 
 1. Check Python biliup:
    ```bash
-   py -c "import biliup; print('biliup OK')" 2>/dev/null || echo "biliup MISSING"
+   python -c "import biliup; print('biliup OK')" 2>/dev/null || echo "biliup MISSING"
    ```
    If missing:
    ```bash
-   py -m pip install biliup
+   python -m pip install biliup
    ```
 
 2. Check cookie status:
@@ -113,7 +112,7 @@ If `%USERPROFILE%\.bilibili\cookies.json` exists, assume valid (biliup handles e
 If missing, use the CLI wrapper:
 
 ```bash
-py "D:/Envs/Paper_Survey_Env/.omp/skills/bilibili-video-uploader/scripts/upload.py" --login
+python "<SKILLS_DIR>/bilibili-video-uploader/scripts/upload.py" --login
 ```
 
 This displays a QR code in the terminal. **Instruct the user to scan it with the
@@ -223,7 +222,7 @@ the biliup command with `--submit web` (current working API), and handles
 error classification.
 
 ```bash
-"C:/Users/disco/AppData/Local/Programs/Python/Python310/python.exe" "D:/Envs/Paper_Survey_Env/.omp/skills/bilibili-video-uploader/scripts/upload.py" "<PAPER_DIR>"
+python "<SKILLS_DIR>/bilibili-video-uploader/scripts/upload.py" "<PAPER_DIR>"
 ```
 
 ### 4.1 What the script does
@@ -231,7 +230,7 @@ error classification.
 1. Reads `video/video_meta.json`
 2. Finds the `.mp4` in `video/`
 3. Validates cover existence
-4. Builds: `py -m biliup -u cookies.json upload <mp4> --title ... --tid ... --tag ... --submit web ...`
+4. Builds: `python -m biliup -u cookies.json upload <mp4> --title ... --tid ... --tag ... --submit web ...`
 5. Runs the command, captures output
 6. Extracts `BV[0-9A-Za-z]{10}` from output → constructs `https://www.bilibili.com/video/<BV号>`
 7. Classifies errors: auth expiry, duplicate, too-large, rate-limit

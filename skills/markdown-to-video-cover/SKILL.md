@@ -26,12 +26,11 @@ style with large title and bold metrics. Generates `.tex`, `.pdf`, and `.png`.
 
 ## How to run
 
-The generator lives at `.omp/skills/markdown-to-video-cover/scripts/generate_poster.py`
+The generator lives at `<SKILLS_DIR>/markdown-to-video-cover/scripts/generate_poster.py`
 and uses only Python stdlib — no dependencies.
 
 ```
-C:/Users/disco/AppData/Local/Programs/Python/Python310/python.exe \
-  .omp/skills/markdown-to-video-cover/scripts/generate_poster.py \
+python <SKILLS_DIR>/markdown-to-video-cover/scripts/generate_poster.py \
   "<paper_dir>" [--data data.json] [--title-font N] [--no-png]
 ```
 
@@ -136,7 +135,8 @@ To customize which figures go in which column, add the `figures` key
 lualatex --version
 ```
 
-Expected: LuaTeX 1.18+ (TeX Live 2024). Installed at `C:\texlive\2024\bin\windows\lualatex.exe`.
+Expected: LuaTeX 1.18+ (TeX Live 2024). If `lualatex` is not on PATH, install
+TeX Live or set the `LUALATEX` env var to the full path of `lualatex.exe`.
 
 ### 2. Check pdftoppm
 
@@ -144,17 +144,18 @@ Expected: LuaTeX 1.18+ (TeX Live 2024). Installed at `C:\texlive\2024\bin\window
 pdftoppm -v
 ```
 
-If missing, install poppler-utils.
+If missing, install poppler-utils (e.g. `pip install poppler-utils` or your
+system package manager). If `pdftoppm` is not on PATH, set the `POPPLER_DIR`
+env var to the directory that contains it.
 
-**NOTE**: `pdftoppm` must be on PATH for the script's auto-PNG step.
-If the script runs but PNG is missing afterward, use the manual fallback
-in Troubleshooting below. On this machine, the TeX Live pdftoppm is at
-`C:\texlive\2024\bin\windows\pdftoppm.exe`.
+**NOTE**: `pdftoppm` must be resolvable (on PATH or via `POPPLER_DIR`) for the
+script's auto-PNG step. If the script runs but PNG is missing afterward, use
+the manual fallback in Troubleshooting below.
 
 ### 3. Check templates
 
 ```bash
-ls .omp/skills/markdown-to-video-cover/templates/
+ls <SKILLS_DIR>/markdown-to-video-cover/templates/
 ```
 
 
@@ -165,8 +166,8 @@ ls .omp/skills/markdown-to-video-cover/templates/
 - **"No figures extracted"** → the markdown doesn't have recognizable
   `Figure N` or `Fig. N` captions near image references. Use `--data`
   with a `figure_map` to specify images manually (see JSON format above).
-- **"lualatex: command not found"** → TeX Live not on PATH. Use full path
-  `C:\texlive\2024\bin\windows\lualatex.exe`.
+- **"lualatex: command not found"** → TeX Live not on PATH. Set the `LUALATEX`
+  env var to the full path of `lualatex.exe`, or add TeX Live to PATH.
 - **PDF has no images** → figure paths in the generated `.tex` may be wrong.
   Check `poster/poster.tex` figure paths against `poster/figures/`.
 - **Title too long, overflows headline** → reduce with `--title-font 180`.
@@ -181,13 +182,14 @@ ls .omp/skills/markdown-to-video-cover/templates/
   `ls md_output/*/auto/images/` to find the correct prefix.
 
 - **poster.png missing after script completes** → the auto-PNG step failed
-  because `pdftoppm` was not found on PATH or the rename from `poster-1.png`
+  because `pdftoppm` could not be resolved (not on PATH and `POPPLER_DIR`
+  unset) or the rename from `poster-1.png`
   failed. **MUST fix this before the bilibili uploader runs** — it requires
   `poster/poster.png` to generate the video cover. Manual fallback:
 
   ```bash
   # cwd: <paper_dir>/poster/
-  "C:/texlive/2024/bin/windows/pdftoppm.exe" -png -r 300 -singlefile poster.pdf poster
+  pdftoppm -png -r 300 -singlefile poster.pdf poster
   ```
 
   This produces `poster.png` directly. Verify with `ls -la poster.png`.

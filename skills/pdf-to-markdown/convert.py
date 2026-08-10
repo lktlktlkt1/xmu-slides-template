@@ -2,7 +2,7 @@
 """Convert a PDF (or image/docx/pptx/xlsx) to Markdown with MinerU's in-process API.
 
 Bypasses MinerU 3.4.0's orchestrated local API server (which 502s on Windows) by
-calling `do_parse` directly. Runs the `pipeline` backend on CUDA (the RTX 4090).
+calling `do_parse` directly. Runs the `pipeline` backend on a CUDA GPU.
 
 Usage:
     python convert.py <input_path> <output_dir> [--lang ch] [--backend pipeline] [--method auto]

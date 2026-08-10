@@ -15,8 +15,8 @@ Functions:
   assemble_video(frame_dir, output_path, fps=30) -> None
 
 Usage:
-  py -c "from slides_to_video import render_slides; render_slides('main.pdf', 'frames')"
-  py slides_to_video.py main.tex   (runs full pipeline)
+  python -c "from slides_to_video import render_slides; render_slides('main.pdf', 'frames')"
+  python slides_to_video.py main.tex   (runs full pipeline)
 """
 
 import json
@@ -571,7 +571,8 @@ def render_slides(pdf_path: str, output_dir: str, dpi: int = 200) -> list:
 
     os.makedirs(output_dir, exist_ok=True)
 
-    poppler_path = r'C:\texlive\2024\bin\windows'
+    poppler_dir = os.environ.get("POPPLER_DIR")
+    poppler_path = poppler_dir if (poppler_dir and os.path.isdir(poppler_dir)) else None
     images = convert_from_path(pdf_path, dpi=dpi, poppler_path=poppler_path)
 
     paths = []
@@ -1086,9 +1087,9 @@ def run_full_pipeline(paper_dir: str) -> dict:
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
-        print('Usage: py slides_to_video.py <paper_dir>')
+        print('Usage: python slides_to_video.py <paper_dir>')
         print('  <paper_dir> must contain slides-beamer/main.tex and slides-beamer/main.pdf')
-        print('  Example: py slides_to_video.py "论文分享/RSS 2026 - LDA-1B"')
+        print('  Example: python slides_to_video.py "论文分享/<DIR_NAME>"')
         sys.exit(1)
 
     paper_dir = sys.argv[1]

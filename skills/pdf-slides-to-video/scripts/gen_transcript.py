@@ -3,7 +3,7 @@ gen_transcript.py — Generate transcript_raw.txt from parsed Beamer frames.
 
 Usage:
     from gen_transcript import generate_raw_transcript
-    generate_raw_transcript(r'论文分享\SCIENCE ROBOTICS 2025 - MT3')
+    generate_raw_transcript(r'论文分享\<DIR_NAME>')
 """
 
 import os

@@ -14,8 +14,7 @@ Single unified pipeline from a paper PDF to Bilibili upload. Designed for one
 subagent per paper — the agent reads this one file and follows the phases for
 the requested mode.
 
-**Python path**: ALWAYS use `C:/Users/disco/AppData/Local/Programs/Python/Python310/python.exe`
-— never `py` or `python` (broken WSL routing).
+**Python path**: ALWAYS use `python` (Python 3.10+; if `python` is missing, use `py -3`).
 
 ---
 
@@ -33,7 +32,7 @@ the requested mode.
 2. Derive a short directory name from the PDF filename or paper title:
    - Strip `.pdf`, extract venue + year + short title.
    - Convention: `{VENUE} - {SHORT_TITLE}` or `arXiv {YEAR} - {SHORT_TITLE}`.
-3. Create `D:/Envs/Paper_Survey_Env/论文分享/<DIR_NAME>/` and copy the PDF there.
+3. Create `$PP_ROOT/论文分享/<DIR_NAME>/` and copy the PDF there.
 4. Store `<DIR_NAME>` for all subsequent phases.
 
 ---
@@ -43,10 +42,10 @@ the requested mode.
 Run MinerU to extract markdown from the PDF:
 
 ```bash
-"C:/Users/disco/.mineru-env/Scripts/python.exe" \
-  "C:/Users/disco/.claude/skills/pdf-to-markdown/convert.py" \
-  "D:/Envs/Paper_Survey_Env/论文分享/<DIR_NAME>/<pdf_filename>.pdf" \
-  "D:/Envs/Paper_Survey_Env/论文分享/<DIR_NAME>/md_output" \
+"$MINERU_PYTHON" \
+  "<SKILLS_DIR>/pdf-to-markdown/convert.py" \
+  "$PP_ROOT/论文分享/<DIR_NAME>/<pdf_filename>.pdf" \
+  "$PP_ROOT/论文分享/<DIR_NAME>/md_output" \
   --lang en
 ```
 
@@ -59,19 +58,20 @@ Output lands at `md_output/<pdf_basename>/auto/<pdf_basename>.md`.
 
 ### 3.1 Copy template
 ```bash
-cp -r "D:/Envs/Paper_Survey_Env/论文分享/SCIENCE ROBOTICS 2025 - HIL SERL/slides-template" \
-  "D:/Envs/Paper_Survey_Env/论文分享/<DIR_NAME>/slides-template"
+git clone --depth 1 https://github.com/yhbcode000/sustech-slides-template.git \
+  "$PP_ROOT/论文分享/<DIR_NAME>/slides-template"
+rm -rf "$PP_ROOT/论文分享/<DIR_NAME>/slides-template/.git"
 ```
 
 ### 3.2 Create slides-beamer
 ```bash
-mkdir -p "D:/Envs/Paper_Survey_Env/论文分享/<DIR_NAME>/slides-beamer/figures"
-cp -r "D:/Envs/Paper_Survey_Env/论文分享/<DIR_NAME>/slides-template/sustech-theme" \
-  "D:/Envs/Paper_Survey_Env/论文分享/<DIR_NAME>/slides-beamer/"
-cp "D:/Envs/Paper_Survey_Env/论文分享/<DIR_NAME>/slides-template/latexmkrc" \
-  "D:/Envs/Paper_Survey_Env/论文分享/<DIR_NAME>/slides-beamer/"
-cp "D:/Envs/Paper_Survey_Env/论文分享/<DIR_NAME>/slides-template/main_template.tex" \
-  "D:/Envs/Paper_Survey_Env/论文分享/<DIR_NAME>/slides-beamer/main.tex"
+mkdir -p "$PP_ROOT/论文分享/<DIR_NAME>/slides-beamer/figures"
+cp -r "$PP_ROOT/论文分享/<DIR_NAME>/slides-template/sustech-theme" \
+  "$PP_ROOT/论文分享/<DIR_NAME>/slides-beamer/"
+cp "$PP_ROOT/论文分享/<DIR_NAME>/slides-template/latexmkrc" \
+  "$PP_ROOT/论文分享/<DIR_NAME>/slides-beamer/"
+cp "$PP_ROOT/论文分享/<DIR_NAME>/slides-template/main_template.tex" \
+  "$PP_ROOT/论文分享/<DIR_NAME>/slides-beamer/main.tex"
 ```
 
 ### 3.3 Fill main.tex
@@ -80,7 +80,7 @@ Fill ALL sections of the template: title, authors, venue, abstract, background,
 related work, method (2 frames), experiment design, results (2-3 frames),
 limitations, takeaways, references, Q&A. Add 3-8 appendix slides.
 
-**Style reference**: `D:/Envs/Paper_Survey_Env/论文分享/SCIENCE ROBOTICS 2025 - HIL SERL/slides-beamer/main.tex`
+**Style reference**: `<TEMPLATE_DIR>/main_template.tex`
 
 Critical rules:
 - `aspectratio=1610` (16:10, NOT 16:9)
@@ -94,7 +94,7 @@ Critical rules:
 
 ### 3.4 Compile
 ```bash
-cd "D:/Envs/Paper_Survey_Env/论文分享/<DIR_NAME>/slides-beamer"
+cd "$PP_ROOT/论文分享/<DIR_NAME>/slides-beamer"
 latexmk -xelatex main.tex
 ```
 Copy `main.pdf` → `../<DIR_NAME>.pdf`.
@@ -110,7 +110,7 @@ Extract the real venue from `\setsource{Venue}{Year}` in the compiled .tex pream
 
 If the extracted venue differs from the current directory prefix (e.g. "arXiv" → "ICML 2023"):
 ```bash
-mv "D:/Envs/Paper_Survey_Env/论文分享/<OLD>" "D:/Envs/Paper_Survey_Env/论文分享/<VENUE> <YEAR> - <SHORT>"
+mv "$PP_ROOT/论文分享/<OLD>" "$PP_ROOT/论文分享/<VENUE> <YEAR> - <SHORT>"
 ```
 Also rename `<DIR_NAME>.pdf` to match.
 
@@ -126,25 +126,25 @@ but does NOT run TTS or ffmpeg. The main agent batch-processes those later.
 
 ### 4a.1 Set up video directory
 ```bash
-mkdir -p "D:/Envs/Paper_Survey_Env/论文分享/<DIR_NAME>/video/video_frames"
-cp "D:/Envs/Paper_Survey_Env/论文分享/<DIR_NAME>/slides-beamer/main.tex" \
-  "D:/Envs/Paper_Survey_Env/论文分享/<DIR_NAME>/video/main_with_narration.tex"
+mkdir -p "$PP_ROOT/论文分享/<DIR_NAME>/video/video_frames"
+cp "$PP_ROOT/论文分享/<DIR_NAME>/slides-beamer/main.tex" \
+  "$PP_ROOT/论文分享/<DIR_NAME>/video/main_with_narration.tex"
 ```
 
 ### 4a.2 Parse frames for context
 Use the Python helper to understand slide structure:
 ```bash
-"C:/Users/disco/AppData/Local/Programs/Python/Python310/python.exe" -c "
-import sys; sys.path.insert(0, r'.omp\skills\pdf-slides-to-video\scripts')
+python -c "
+import sys; sys.path.insert(0, r'<SKILLS_DIR>/pdf-slides-to-video/scripts')
 from slides_to_video import parse_beamer_frames, parse_beamer_preamble
-preamble = parse_beamer_preamble(r'D:/Envs/Paper_Survey_Env/论文分享/<DIR_NAME>/slides-beamer/main.tex')
-frames = parse_beamer_frames(r'D:/Envs/Paper_Survey_Env/论文分享/<DIR_NAME>/slides-beamer/main.tex')
+preamble = parse_beamer_preamble(r'$PP_ROOT/论文分享/<DIR_NAME>/slides-beamer/main.tex')
+frames = parse_beamer_frames(r'$PP_ROOT/论文分享/<DIR_NAME>/slides-beamer/main.tex')
 for f in frames:
     print(f'Slide {f[\"page_num\"]}: [{f.get(\"is_plain\",\"\")}] {f[\"title\"][:60]}')
     for item in f.get('items', []):
         print(f'  {item[:80]}')
 import json
-with open(r'D:/Envs/Paper_Survey_Env/论文分享/<DIR_NAME>/video/frames_data.json', 'w', encoding='utf-8') as f:
+with open(r'$PP_ROOT/论文分享/<DIR_NAME>/video/frames_data.json', 'w', encoding='utf-8') as f:
     json.dump({'preamble': preamble, 'frames': frames}, f, ensure_ascii=False)
 "
 ```
@@ -163,11 +163,11 @@ in `video/main_with_narration.tex`. Edit the file with insertion operations.
 ### 4a.4 VALIDATION GATE — Narration coverage
 Before proceeding, verify EVERY frame has a narration:
 ```bash
-"C:/Users/disco/AppData/Local/Programs/Python/Python310/python.exe" -c "
-import sys; sys.path.insert(0, r'.omp\skills\pdf-slides-to-video\scripts')
+python -c "
+import sys; sys.path.insert(0, r'<SKILLS_DIR>/pdf-slides-to-video/scripts')
 from slides_to_video import parse_beamer_frames
-frames = parse_beamer_frames(r'D:/Envs/Paper_Survey_Env/论文分享/<DIR_NAME>/slides-beamer/main.tex')
-with open(r'D:/Envs/Paper_Survey_Env/论文分享/<DIR_NAME>/video/main_with_narration.tex', 'r', encoding='utf-8') as f:
+frames = parse_beamer_frames(r'$PP_ROOT/论文分享/<DIR_NAME>/slides-beamer/main.tex')
+with open(r'$PP_ROOT/论文分享/<DIR_NAME>/video/main_with_narration.tex', 'r', encoding='utf-8') as f:
     n = sum(1 for line in f if line.strip().startswith('% NARRATION:'))
 print(f'Frames: {len(frames)}, Narrations: {n}')
 assert len(frames) == n, f'MISMATCH: {len(frames)} frames but {n} narrations! Fix before continuing.'
@@ -186,11 +186,11 @@ markdown-to-video-cover skill to produce `poster/poster.png`. The video pipeline
 cover generator will automatically use this poster when available.
 
 ```bash
-ls "D:/Envs/Paper_Survey_Env/论文分享/<DIR_NAME>/md_output/" && (
+ls "$PP_ROOT/论文分享/<DIR_NAME>/md_output/" && (
   echo '{"cards_col1":[],"cards_col2":[],"title_font":100}' > _cover.json
-  "C:/Users/disco/AppData/Local/Programs/Python/Python310/python.exe" \
-    .omp/skills/markdown-to-video-cover/scripts/generate_poster.py \
-    "D:/Envs/Paper_Survey_Env/论文分享/<DIR_NAME>" --data _cover.json
+  python \
+    <SKILLS_DIR>/markdown-to-video-cover/scripts/generate_poster.py \
+    "$PP_ROOT/论文分享/<DIR_NAME>" --data _cover.json
   rm _cover.json
 ) || echo "No md_output, skipping poster"
 ```
@@ -202,13 +202,13 @@ ls "D:/Envs/Paper_Survey_Env/论文分享/<DIR_NAME>/md_output/" && (
 The main agent runs this after all narration agents complete. Uses 8 workers by default.
 
 ```python
-import sys; sys.path.insert(0, r'.omp\skills\pdf-slides-to-video\scripts')
+import sys; sys.path.insert(0, r'<SKILLS_DIR>/pdf-slides-to-video/scripts')
 from slides_to_video import write_narrations_to_files, batch_tts_parallel, assemble_video, render_slides
 
-frame_dir = r'D:/Envs/Paper_Survey_Env/论文分享/<DIR_NAME>/video/video_frames'
-tex = r'D:/Envs/Paper_Survey_Env/论文分享/<DIR_NAME>/slides-beamer/main.tex'
-anno = r'D:/Envs/Paper_Survey_Env/论文分享/<DIR_NAME>/video/main_with_narration.tex'
-pdf = r'D:/Envs/Paper_Survey_Env/论文分享/<DIR_NAME>/slides-beamer/main.pdf'
+frame_dir = r'$PP_ROOT/论文分享/<DIR_NAME>/video/video_frames'
+tex = r'$PP_ROOT/论文分享/<DIR_NAME>/slides-beamer/main.tex'
+anno = r'$PP_ROOT/论文分享/<DIR_NAME>/video/main_with_narration.tex'
+pdf = r'$PP_ROOT/论文分享/<DIR_NAME>/slides-beamer/main.pdf'
 
 # 1. Render slides to PNGs
 render_slides(pdf, frame_dir, dpi=200)
@@ -220,7 +220,7 @@ write_narrations_to_files(frame_dir, tex, annotated_tex_path=anno)
 batch_tts_parallel(frame_dir, lang='zh')
 
 # 4. Assemble MP4 (8 workers, 1.25x speedup)
-assemble_video(frame_dir, r'D:/Envs/Paper_Survey_Env/论文分享/<DIR_NAME>/video/<SHORT>_narrated.mp4',
+assemble_video(frame_dir, r'$PP_ROOT/论文分享/<DIR_NAME>/video/<SHORT>_narrated.mp4',
                pad_sec=0.5, speed=1.25)
 ```
 
@@ -232,11 +232,11 @@ Also generate cover.png (prefers poster when available) and video_meta.json.
 
 Only for `bilibili` mode. After Phase 4b completes, upload the narrated MP4.
 
-**Direct Python path required** (WSL is broken):
+**Python path**: `python` (Python 3.10+; if `python` is missing, use `py -3`):
 ```bash
-"C:/Users/disco/AppData/Local/Programs/Python/Python310/python.exe" \
-  "D:/Envs/Paper_Survey_Env/.omp/skills/bilibili-video-uploader/scripts/upload.py" \
-  "D:/Envs/Paper_Survey_Env/论文分享/<DIR_NAME>"
+python \
+  "<SKILLS_DIR>/bilibili-video-uploader/scripts/upload.py" \
+  "$PP_ROOT/论文分享/<DIR_NAME>"
 ```
 
 The upload.py script:

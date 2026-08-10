@@ -17,7 +17,31 @@ import sys, os, re, json, glob as _glob, subprocess, argparse, shutil
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 SKILL_DIR = os.path.dirname(SCRIPT_DIR)
 TEMPLATES_DIR = os.path.join(SKILL_DIR, "templates")
-LUALATEX = r"C:\texlive\2024\bin\windows\lualatex.exe"
+
+
+def find_lualatex():
+    exe = os.environ.get("LUALATEX")
+    if exe and os.path.isfile(exe):
+        return exe
+    found = shutil.which("lualatex")
+    if found:
+        return found
+    sys.exit("lualatex not found: install TeX Live or set LUALATEX to the full path of lualatex.exe")
+
+
+LUALATEX = find_lualatex()
+
+
+def find_pdftoppm():
+    exe = os.environ.get("POPPLER_DIR")
+    if exe:
+        candidate = os.path.join(exe, "pdftoppm" + (".exe" if os.name == "nt" else ""))
+        if os.path.isfile(candidate):
+            return candidate
+    return shutil.which("pdftoppm")
+
+
+PDFTOPPM = find_pdftoppm()
 
 # ═══════════════════════════════════════════════════════════════
 # Markdown parser
@@ -459,7 +483,7 @@ def main():
     if not args.no_png:
         print(f"\n[6/6] Rendering PNG...")
         result = subprocess.run(
-            ["pdftoppm", "-png", "-r", "150", "-f", "1", "-l", "1",
+            [PDFTOPPM or "pdftoppm", "-png", "-r", "150", "-f", "1", "-l", "1",
              "poster.pdf", "poster"],
             cwd=poster_dir,
             capture_output=True, text=True,

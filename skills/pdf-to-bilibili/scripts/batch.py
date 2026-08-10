@@ -3,20 +3,20 @@ Batch orchestrator for pdf-to-bilibili pipeline.
 Main agent role: load state, dispatch subagents, monitor, handle failures.
 
 Usage:
-  py batch.py <mode> <papers.json>
+  python batch.py <mode> <papers.json>
   mode: slides | video | bilibili
   papers.json: JSON array of {arxiv_id, title, pdf_path, dir_name, dir_path}
 
 The main agent NEVER writes slides, narrations, or runs TTS — only coordinates.
 """
-import json, os, time, glob, subprocess, re
+import json, os, sys, time, glob, subprocess, re
 from pathlib import Path
 from collections import Counter
 
-BASE = Path(r"D:\Envs\Paper_Survey_Env\论文分享")
-SKILL_DIR = Path(r"D:\Envs\Paper_Survey_Env\.omp\skills\pdf-to-bilibili")
-PYTHON = r"C:\Users\disco\AppData\Local\Programs\Python\Python310\python.exe"
-UPLOAD_SCRIPT = r"D:\Envs\Paper_Survey_Env\.omp\skills\bilibili-video-uploader\scripts\upload.py"
+BASE = Path(os.environ.get("PP_ROOT", os.getcwd())) / "论文分享"
+SKILL_DIR = Path(__file__).resolve().parent.parent
+PYTHON = os.environ.get("PP_PYTHON", sys.executable)
+UPLOAD_SCRIPT = SKILL_DIR.parent / "bilibili-video-uploader" / "scripts" / "upload.py"
 
 # ── State management ──
 
@@ -90,7 +90,7 @@ def print_dashboard(papers, mode):
 
 def batch_complete_videos(papers):
     """Run TTS + assembly for all papers with narrations but no video."""
-    sys.path.insert(0, str(Path(r".omp/skills/pdf-slides-to-video/scripts")))
+    sys.path.insert(0, str(SKILL_DIR.parent / "pdf-slides-to-video" / "scripts"))
     from slides_to_video import write_narrations_to_files, batch_tts_parallel, assemble_video, render_slides
     
     for p in papers:
@@ -154,7 +154,7 @@ def main(mode, papers_path):
     if mode == "slides":
         print(f"{sum(1 for p in papers if p['_status'] == 'mineru_done')} papers ready for slides dispatch")
         print(f"Dispatch subagents with: skill://pdf-to-bilibili, mode=slides, Phase 1→2→3→3.5")
-        print(f"Template: D:/Envs/Paper_Survey_Env/.omp/skills/pdf-to-bilibili/scripts/subagent_prompt.md")
+        print(f"Template: {SKILL_DIR / 'scripts' / 'subagent_prompt.md'}")
         print(f"Dispatch 3-6 subagents at a time. If any fail with empty template, redispatch.")
         print(f"If .tex exists but no PDF, run: handle_slides_failure(paper)")
     
@@ -192,8 +192,7 @@ def main(mode, papers_path):
             print(f"Dispatch upload subagent (10 at a time, no gaps) or call: batch_upload(papers)")
 
 if __name__ == "__main__":
-    import sys
     if len(sys.argv) < 3:
-        print("Usage: py batch.py <slides|video|bilibili> <papers.json>")
+        print("Usage: python batch.py <slides|video|bilibili> <papers.json>")
         sys.exit(1)
     main(sys.argv[1], sys.argv[2])
