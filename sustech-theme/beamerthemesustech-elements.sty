@@ -10,16 +10,15 @@
 \RequirePackage{colortbl}
 \RequirePackage{amsmath}
 
-% --- 文字配色别名（强调=橙 / 关键词=橙 / 表头=主蓝）---------------------------
-\colorlet{emph}{sustechorange}
-\colorlet{kw}{sustechorange}
-\colorlet{hdr}{sustechblue}
+% --- 文字配色别名（强调 / 关键词 / 表头）已移至 beamercolorthemesustech.sty：
+% 样式层只引用语义角色名（emph / kw / hdr），具体色值由配色方案决定。
+% 新增配色方案时无需改动本文件。
 
 % --- 强调 / 高亮 -------------------------------------------------------------
 \newcommand{\shl}[1]{\textbf{\textcolor{emph}{#1}}}        % 强调（橙、粗）
 \newcommand{\keyword}[1]{\textbf{\textcolor{kw}{#1}}}      % 关键词（橙、粗）
 \newcommand{\brandemph}[1]{\textit{\textcolor{emph}{#1}}}  % 品牌强调（橙、斜）
-\newcommand{\hlbox}[1]{\colorbox{sustechgold!45}{#1}}      % 金黄底高亮（重要数字）
+\newcommand{\hlbox}[1]{\colorbox{sustechgold}{#1}}       % 强调色底高亮（重要数字，实色）
 
 % --- 图与图注 ----------------------------------------------------------------
 % \fitfigure{file}：限宽限高、保持比例，避免溢出
@@ -44,7 +43,7 @@
 % --- 表格辅助 ----------------------------------------------------------------
 \newcommand{\theadrow}{\rowcolor{hdr}}     % 表头底色行（主蓝）
 \newcommand{\altrow}{\rowcolor{cardgrey}}  % 隔行浅灰
-\newcommand{\thc}[1]{{\color{white}\bfseries #1}}
+\newcommand{\thc}[1]{{\color{thc}\bfseries #1}}
 
 % --- 间距节律 ----------------------------------------------------------------
 \newcommand{\tightgap}{\vspace{0.18em}}
@@ -61,12 +60,11 @@
 % room for insight blocks on the right while keeping the index readable.
 % Use inside \begin{frame}{title} ... \end{frame}.
 \newcommand{\twopane}[2]{%
-  \begin{minipage}[t][0.92\textheight][t]{0.31\textwidth}\vspace{0pt}%
+  \begin{minipage}[t][0.80\textheight][t]{0.31\textwidth}\vspace{0pt}%
     #1%
   \end{minipage}%
   \hfill{\color{sustechgrey}\vrule width 0.5pt}\hfill%
-  \begin{minipage}[t][0.92\textheight][t]{0.62\textwidth}\vspace{0pt}%
-    \vspace{-1em}%
+  \begin{minipage}[t][0.80\textheight][t]{0.62\textwidth}\vspace{0pt}%
     #2%
   \end{minipage}%
 }
@@ -80,15 +78,37 @@
 % --- 章节分隔页（Part 编号 + 标题 + 一句话主旨）------------------------------
 % 在每个 \section 之前用 \renewcommand{\secblurb}{...} 设置本节主旨。
 \newcommand{\secblurb}{}
+% 可视化分析节（\vizbgon 触发）标题页文字放入白色面板，保证在拼贴背景上可读；
+% 其余分节页保持原始样式。\ifvizbgdiv 必须在 frame 环境之外（帧体收集器限制）。
+\setbeamercolor{vizdivbox}{bg=white!85!black}
 \AtBeginSection[]{%
-  \begin{frame}[plain,c]
-    \centering
-    {\color{sustechgrey}\large Part~\thesection}\\[0.6em]
-    {\color{sustechblue}\Huge\bfseries\insertsectionhead}\\[0.8em]
-    {\color{emph}\rule{2cm}{2pt}}\\[1.0em]
-    \begin{minipage}{0.78\textwidth}\centering
-      {\color{sustechink}\normalsize\secblurb}
-    \end{minipage}
-  \end{frame}}
+  \ifvizbgdiv
+    \begin{frame}[plain]
+      \vfill
+      \vspace*{0.045\textheight}% 校正 [plain] 帧体偏上偏移，保证面板严格垂直居中
+      \noindent\hbox to \textwidth{\hss
+      \begin{beamercolorbox}[wd=0.82\textwidth,center,sep=14pt,rounded=true]{vizdivbox}
+        \vspace*{2.1em}% 平衡 Part（上方）与 rule+blurb（下方）的高度差，让标题在面板内垂直居中
+        {\color{sustechgrey}\large Part~\thesection}\\[0.5em]
+        {\color{primtext}\Huge\bfseries\insertsectionhead}\\[0.7em]
+        {\color{emph}\rule{2cm}{2pt}}\\[0.8em]
+        {\color{sustechink}\normalsize\secblurb}
+      \end{beamercolorbox}\hss}
+      \vfill
+    \end{frame}
+  \else
+    \begin{frame}[plain]
+      \vfill
+      \vspace*{0.045\textheight}% 校正 [plain] 帧体偏上偏移，保证标题严格垂直居中
+      \noindent\hbox to \textwidth{\hss
+      \parbox{0.82\textwidth}{\centering
+        {\color{sustechgrey}\large Part~\thesection}\\[0.6em]
+        {\color{primtext}\Huge\bfseries\insertsectionhead}\\[0.8em]
+        {\color{emph}\rule{2cm}{2pt}}\\[1.0em]
+        {\color{sustechink}\normalsize\secblurb}
+      }\hss}
+      \vfill
+    \end{frame}
+  \fi}
 
 \mode<all>

@@ -8,26 +8,31 @@
 %
 % 设计约定（2026-06 更新）：
 %   [卡片] block/exampleblock 一律竖向堆叠，禁止双栏并排卡片。
-%   [大图] 论文主图各自独占 [plain,c] 全幅帧，标题直接 \figcap：
+%   [大图] 图片必须独占一页（[plain,c] 全幅帧），标题直接 \figcap：
 %          \begin{frame}[plain,c]
 %            \centering
 %            \includegraphics[height=0.92\textheight,width=\textwidth,keepaspectratio]{...}
 %            \figcap{N}{标题}   ← \figcap 内置 \par\smallskip\centering，无需额外 \tightgap
 %          \end{frame}
+%          禁止在图片下方追加 block / callout / 说明文字；图片独占一页。
 %   [指标] \metric 必须把 \times 等数学符号包在 $...$ 中（如 $10\times$）。
 %   [度数] 用 $^\circ$ 而非 \textdegree（后者需 textcomp 包）。
 % =============================================================================
 % =============================================================================
 % 幻灯片比例配置（只改 aspectratio 的数值即可）
-%   aspectratio=169   16:9   宽屏，会议/投影默认            ← 推荐
-%   aspectratio=1610  16:10  部分笔记本 / 投影              ← 推荐
-%   aspectratio=43    4:3    老式投影 / 教室白板            ← 推荐
+%   aspectratio=1610  16:10  实验室调研 / 论文分享统一比例   ← 默认
+%   aspectratio=169   16:9   宽屏会议/投影（需要时切换）
+%   aspectratio=43    4:3    老式投影 / 教室白板
 %   其它可选：149 (14:9) · 54 (5:4) · 32 (3:2) · 1410 (14:10)
 % 标题页与各排版宏均按相对宽度自适应，切换比例无需改正文。
 % =============================================================================
-\documentclass[aspectratio=169,10pt]{ctexbeamer}
+\documentclass[aspectratio=1610,10pt]{ctexbeamer}
 
 \usetheme{sustech}        % Madrid 基础 + 学术配色 + 排版宏（见 sustech-theme/）
+
+% 可视化分析分节页（\vizbgon 触发）依赖的条件声明；论文分享默认关闭：
+\newif\ifvizbgdiv
+\vizbgdivfalse
 
 \usepackage{amssymb}
 \usepackage{tikz}
@@ -46,15 +51,15 @@
 % 标题页字段（新版结构，见 sustech-theme 说明）：
 %   主标题 / 副标题 → 论文全部作者 → 团队所属单位 →（论文来源）→ 领域 →
 %   汇报人 · 地点 · 时间 → logo
-\title[\ph{短标题}]{\ph{中文主标题}}
-\subtitle{\ph{英文副标题 / English subtitle}}
-\author[\ph{一作 et al.}]{\ph{论文全部作者（按论文署名顺序）}}
-\institute[\ph{机构}]{\ph{团队所属单位}}
-\setsource{\ph{会议 / 期刊}}{\ph{年份}}   % 论文来源；不需要可删除本行
-\setdomains{\domaintag{\ph{领域1}}\domaintag{\ph{领域2}}\domaintag{\ph{领域3}}}
-\setpresenter{\ph{汇报人}}
-\setvenue{\ph{地点}}
-\date{\ph{YYYY-MM-DD}}
+\title[〈短标题〉]{〈中文主标题〉}
+\subtitle{〈英文副标题 / English subtitle〉}
+\author[〈一作 et al.〉]{〈论文全部作者（按论文署名顺序）〉}
+\institute[〈机构〉]{〈团队所属单位〉}
+\setsource{〈会议 / 期刊〉}{〈年份〉}   % 论文来源；不需要可删除本行
+\setdomains{\domaintag{〈领域1〉}\domaintag{〈领域2〉}\domaintag{〈领域3〉}}
+\setpresenter{〈汇报人〉}
+\setvenue{〈地点〉}
+\date{〈YYYY-MM-DD〉}
 
 \begin{document}
 
@@ -65,16 +70,16 @@
 
 % ============================ 目录 ============================
 \begin{frame}{目录}
+  \vspace{-0.6em}
   \twopane{%
     {\tocdense\footnotesize\tableofcontents[hideallsubsections]}
   }{%
     \begin{block}{核心观察}
-      \begin{itemize}\setlength{\itemsep}{0.15em}
+      \begin{itemize}\setlength{\itemsep}{0.15em}\footnotesize
         \item \shl{\ph{关键数字或特性一}}
         \item \shl{\ph{关键数字或特性二}}
         \item \ph{核心观察三}
         \item \ph{核心观察四}
-        \item \ph{核心观察五}
       \end{itemize}
     \end{block}
     \tightgap
@@ -87,7 +92,7 @@
     \end{block}
     \tightgap
     \begin{callout}[一句话概括]
-      \ph{用一句话概括本论文的核心贡献}。
+      \ph{用一句话概括本文的核心贡献与亮点}。
     \end{callout}
   }
 \end{frame}
@@ -241,13 +246,13 @@
   \renewcommand{\arraystretch}{1.15}
   \begin{tabular}{lcccc}
     \toprule
-    \theadrow \thc{\ph{任务}} & \thc{\ph{基线}} & \thc{\ph{本文}} & \thc{\ph{指标A}} & \thc{\ph{指标B}}\\
+    \theadrow \thc{〈任务〉} & \thc{〈基线〉} & \thc{〈本文〉} & \thc{〈指标A〉} & \thc{〈指标B〉}\\
     \midrule
     \ph{行 1}        & \ph{·} & \shl{\ph{·}} & \ph{·} & \shl{\ph{·}}\\
     \altrow \ph{行 2} & \ph{·} & \shl{\ph{·}} & \ph{·} & \shl{\ph{·}}\\
     \ph{行 3}        & \ph{·} & \shl{\ph{·}} & \ph{·} & \shl{\ph{·}}\\
     \midrule
-    \theadrow \thc{平均} & \thc{\ph{·}} & \thc{\ph{·}} & \thc{\ph{·}} & \thc{\ph{·}}\\
+    \theadrow \thc{平均} & \thc{〈·〉} & \thc{〈·〉} & \thc{〈·〉} & \thc{〈·〉}\\
     \bottomrule
   \end{tabular}
   \deckgap

@@ -173,7 +173,7 @@ latexmk -xelatex main.tex
 最小化导言区：
 
 ```latex
-\documentclass[aspectratio=169,10pt]{ctexbeamer}  % 比例见下方“幻灯片比例”一节
+\documentclass[aspectratio=1610,10pt]{ctexbeamer}  % 比例见下方“幻灯片比例”一节
 \usetheme{sustech}
 \title[短标题]{中文主标题}
 \subtitle{English subtitle}
@@ -199,12 +199,12 @@ latexmk -xelatex main.tex
 
 | 比例 | 选项值 | 适用场景 | 推荐 |
 |:---|:---|:---|:---:|
-| **16:9** | `aspectratio=169` | 宽屏、会议 / 投影默认 | ✅ |
-| **16:10** | `aspectratio=1610` | 部分笔记本 / 投影 | ✅ |
+| **16:10** | `aspectratio=1610` | 论文分享 / 实验室调研统一比例（模板默认） | ✅ |
+| **16:9** | `aspectratio=169` | 宽屏会议 / 在线直播默认 | ✅ |
 | **4:3** | `aspectratio=43` | 老式投影 / 教室白板 | ✅ |
 | 其它 | `149` · `54` · `32` · `1410` | 14:9 · 5:4 · 3:2 · 14:10 | |
 
-> 💡 不确定就用 **16:9**（`169`）——当前主流投影与在线会议的默认比例。
+> 💡 模板默认 **16:10**（`1610`，论文分享/调研统一比例）；需要宽屏直播或会议时再切 `169`。
 
 ---
 
@@ -259,8 +259,16 @@ latexmk -xelatex main.tex
 ## ⚙️ 自定义 | Customization
 
 ```latex
-% 标题页 Logo（默认 = SUSTech）。按需覆盖：
-\renewcommand{\sustechlogo}{my_logo}      % figures/ 或 theme assets/ 下的文件
+% 标题页 Logo（默认 = SUSTech 校徽）。按需覆盖：
+\setlogo{my_logo}                          % figures/ 或 theme assets/ 下的文件
+\setlogo[0.22\paperheight]{my_logo}        % 自定义高度（默认 0.18）
+\setlogo{}                                 % 隐藏 Logo（标题页自动收紧版式）
+
+% 配色方案（默认 = default 学术蓝；在 \usetheme{sustech} 之后调用）：
+\sustechscheme{bilibili}                   % B站粉：深粉主色 + B站蓝强调
+\sustechscheme{official-bilibili-pink-blue}% 官方 B站 AI 区指南配色（全黑字 + 官方粉/蓝）
+\sustechscheme{lab}                        % 实验室调研：复旦红 + 宝石红 + 香槟金
+\sustechscheme{default}                    % 恢复默认
 
 % 作者信息宏（已定义，不自动渲染 — 自行放置）：
 \setcreditauthor{Your Name}

@@ -42,10 +42,15 @@
   \g@addto@macro\Ginput@path{{sustech-theme/assets/}}%
 }
 \makeatother
-% logo 路径宏（可在正文用 \renewcommand{\sustechlogo}{...} 覆盖）
-\providecommand{\sustechlogo}{sustech_logo}
-% 默认把 logo 作为标题页 \titlegraphic（用户仍可在正文重设 \titlegraphic 覆盖）
-\titlegraphic{\includegraphics[height=0.18\paperheight,keepaspectratio]{\sustechlogo}}
+% logo 路径宏（可选）：默认校徽；\setlogo[height]{path} 更换（可调高度），\setlogo{} 隐藏（标题页自动收紧版式）
+\newcommand{\sustechlogo}{}
+\newcommand{\setlogo}[2][0.18\paperheight]{%
+  \renewcommand{\sustechlogo}{#2}%
+  \ifdefempty{\sustechlogo}%
+    {\titlegraphic{}}%
+    {\titlegraphic{\includegraphics[height=#1,keepaspectratio]{#2}}}%
+}
+\setlogo{sustech_logo}   % 默认：主题自带校徽（论文分享等仍显示）
 
 % --- 主题作者 credit 宏（默认 杨昊波，可 \setcredit* 覆盖）--------------
 % 仅定义信息宏，不强制渲染到每页；如需展示可自行放到标题页 / 页脚。
@@ -86,8 +91,8 @@
 \newcommand{\setpresenter}[1]{\renewcommand{\presenter}{#1}}
 \newcommand{\paperdomains}{}
 \newcommand{\setdomains}[1]{\renewcommand{\paperdomains}{#1}}
-% 单个领域标签（浅灰底 + 蓝字小药丸）
-\newcommand{\domaintag}[1]{\colorbox{cardgrey}{\small\color{sustechblue2}\strut\,#1\,}\hspace{0.35em}}
+% 单个领域标签（浅灰底 + 强调色文字，跨方案自适应：默认=橙 / lab=宝石红 / bilibili=蓝）
+\newcommand{\domaintag}[1]{\colorbox{cardgrey}{\small\color{emph}\strut\,#1\,}\hspace{0.35em}}
 % 论文来源（可选）：\setsource{期刊 / 会议}{年份}
 \newcommand{\papersourceinfo}{}
 \newcommand{\setsource}[2]{\renewcommand{\papersourceinfo}{\paperfrom{#1}{#2}}}
@@ -103,8 +108,9 @@
 %       汇报人·地点·时间 → logo
 \setbeamertemplate{title page}{%
   \centering
+  \ifdefempty{\inserttitlegraphic}{\vskip2.2em}{}%  无 logo：标题块下沉至视觉中心，避免底部空洞
   \vfill
-  \begin{beamercolorbox}[wd=0.92\paperwidth,sep=12pt,center,rounded=true,shadow=true]{title}
+  \begin{beamercolorbox}[wd=\textwidth,sep=12pt,center,rounded=true,shadow=true]{title}
     {\usebeamerfont{title}\inserttitle\par}%
     \ifx\insertsubtitle\@empty\else
       \vskip0.45em
@@ -119,8 +125,9 @@
   \vskip0.9em
   \ifdefempty{\paperdomains}{}{\paperdomains\par\vskip0.9em}%
   {\small\color{sustechgrey}\titlemetaline\par}%
-  \vskip1.0em
-  {\inserttitlegraphic\par}%
+  \ifdefempty{\inserttitlegraphic}%
+    {\vskip0.8em}%   无 logo：底部留少量呼吸空间
+    {\vskip1.0em {\inserttitlegraphic\par}}%
   \vfill
 }
 
