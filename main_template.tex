@@ -1,10 +1,11 @@
 % !TEX program = xelatex
+% Modified for the XMU theme by 李坤泰 (lktlktlkt1), 2026.
 % =============================================================================
-% 模板 / TEMPLATE —— 使用可复用的 sustech 主题
+% 模板 / TEMPLATE —— 使用可复用的 xmu 主题
 %
 % 用法：复制本文件为 main.tex，替换所有 〈…〉 占位符为真实内容即可。
 % 构建：latexmk -xelatex main_template.tex
-%       （latexmkrc 已把 ./sustech-theme// 加入 TEXINPUTS）
+%       （latexmkrc 已把 ./xmu-theme// 加入 TEXINPUTS）
 %
 % 设计约定（2026-06 更新）：
 %   [卡片] block/exampleblock 一律竖向堆叠，禁止双栏并排卡片。
@@ -28,7 +29,7 @@
 % =============================================================================
 \documentclass[aspectratio=1610,10pt]{ctexbeamer}
 
-\usetheme{sustech}        % Madrid 基础 + 学术配色 + 排版宏（见 sustech-theme/）
+\usetheme{xmu}        % Madrid 基础 + 学术配色 + 排版宏（见 xmu-theme/）
 
 % 可视化分析分节页（\vizbgon 触发）依赖的条件声明；论文分享默认关闭：
 \newif\ifvizbgdiv
@@ -40,15 +41,15 @@
 
 % --- 占位辅助（仅模板用；真实稿件可删除）------------------------------------
 % 行内占位文字
-\newcommand{\ph}[1]{\textcolor{sustechgrey}{〈#1〉}}
+\newcommand{\ph}[1]{\textcolor{xmugrey}{〈#1〉}}
 % 图片占位框（替换为 \fitfigure{your_image} 即可）
 \newcommand{\phfig}{%
   \fcolorbox{cardgrey}{bgsoft}{%
     \parbox[c][0.42\textheight][c]{0.96\linewidth}{\centering
-      \color{sustechgrey}（图片占位 \textbar\ \texttt{\textbackslash fitfigure\{...\}}）}}}
+      \color{xmugrey}（图片占位 \textbar\ \texttt{\textbackslash fitfigure\{...\}}）}}}
 
 % --- 元信息（替换为你的题目 / 作者）------------------------------------------
-% 标题页字段（新版结构，见 sustech-theme 说明）：
+% 标题页字段（新版结构，见 xmu-theme 说明）：
 %   主标题 / 副标题 → 论文全部作者 → 团队所属单位 →（论文来源）→ 领域 →
 %   汇报人 · 地点 · 时间 → logo
 \title[〈短标题〉]{〈中文主标题〉}
@@ -225,7 +226,7 @@
   \tightgap
   \begin{exampleblock}{评测协议}
     \small \ph{评测方式、指标、试验次数}。\\[0.15em]
-    {\footnotesize\color{sustechgrey} 基线：\ph{baseline A · B · C}}
+    {\footnotesize\color{xmugrey} 基线：\ph{baseline A · B · C}}
   \end{exampleblock}
 \end{frame}
 
@@ -331,7 +332,7 @@
 
   \deckgap
   % 与标题页底部一致（汇报人 · 地点 · 时间）
-  {\color{sustechgrey}\footnotesize \titlemetaline}
+  {\color{xmugrey}\footnotesize \titlemetaline}
 \end{frame}
 
 % ============================ 附录 / Backup ============================
@@ -339,7 +340,7 @@
 
 \begin{frame}[plain,c]
   \centering
-  {\color{sustechgrey}\large Appendix}\\[0.6em]
+  {\color{xmugrey}\large Appendix}\\[0.6em]
   {\Huge\bfseries 备用幻灯片 / Backup}\\[0.9em]
   {\color{emph}\rule{2cm}{2pt}}
 \end{frame}

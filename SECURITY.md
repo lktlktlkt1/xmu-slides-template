@@ -4,7 +4,7 @@
 
 发现安全漏洞（恶意 LaTeX 宏、脚本注入、供应链问题等）请**不要公开提交 issue**，直接：
 
-- 私信 GitHub：[Security Advisories](https://github.com/yhbcode000/sustech-slides-template/security/advisories/new)（推荐，仅维护者可见）
+- 私信 GitHub：[Security Advisories](https://github.com/lktlktlkt1/xmu-slides-template/security/advisories/new)（推荐，仅维护者可见）
 - 或邮件：yhbcode000@foxmail.com
 
 请附上：复现步骤、受影响版本（commit / tag）、影响范围描述。

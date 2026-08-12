@@ -1,16 +1,17 @@
-% beamerthemesustech-elements.sty
-% Theme author: 杨昊波 (Haobo Yang) — 2026 届计算机系博士 · github.com/yhbcode000 · yhbcode000@foxmail.com
-% 可复用排版宏与环境（基于标准 beamer 构件，键入 SUSTech 学术配色）。
-% 由 beamerthemesustech.sty 在加载 color 主题之后引入，故可直接使用
-% sustechorange / sustechblue / sustechgold / sustechink 等颜色。
-\ProvidesPackage{beamerthemesustech-elements}[2026/06/25 SUSTech themed elements (Madrid-based)]
+% beamerthemexmu-elements.sty
+% Original theme: 杨昊波 (Haobo Yang), Apache-2.0.
+% XMU adaptation: 李坤泰 (lktlktlkt1), 2026.
+% 可复用排版宏与环境（基于标准 beamer 构件，键入 XMU 学术配色）。
+% 由 beamerthemexmu.sty 在加载 color 主题之后引入，故可直接使用
+% xmuorange / xmublue / xmugold / xmuink 等颜色。
+\ProvidesPackage{beamerthemexmu-elements}[2026/08/12 XMU themed elements (Madrid-based)]
 
 \RequirePackage{graphicx}
 \RequirePackage{booktabs}
 \RequirePackage{colortbl}
 \RequirePackage{amsmath}
 
-% --- 文字配色别名（强调 / 关键词 / 表头）已移至 beamercolorthemesustech.sty：
+% --- 文字配色别名（强调 / 关键词 / 表头）已移至 beamercolorthemexmu.sty：
 % 样式层只引用语义角色名（emph / kw / hdr），具体色值由配色方案决定。
 % 新增配色方案时无需改动本文件。
 
@@ -18,7 +19,7 @@
 \newcommand{\shl}[1]{\textbf{\textcolor{emph}{#1}}}        % 强调（橙、粗）
 \newcommand{\keyword}[1]{\textbf{\textcolor{kw}{#1}}}      % 关键词（橙、粗）
 \newcommand{\brandemph}[1]{\textit{\textcolor{emph}{#1}}}  % 品牌强调（橙、斜）
-\newcommand{\hlbox}[1]{\colorbox{sustechgold}{#1}}       % 强调色底高亮（重要数字，实色）
+\newcommand{\hlbox}[1]{\colorbox{xmugold}{#1}}       % 强调色底高亮（重要数字，实色）
 
 % --- 图与图注 ----------------------------------------------------------------
 % \fitfigure{file}：限宽限高、保持比例，避免溢出
@@ -27,14 +28,14 @@
 \newcommand{\figureprefix}{图}
 \newcommand{\setfigureprefix}[1]{\renewcommand{\figureprefix}{#1}}
 % \figcap{n}{文字} -> "图 n: 文字" — 自动换行并居中，标题始终在图下方
-\newcommand{\figcap}[2]{\par\smallskip{\centering\footnotesize\color{sustechgrey}\mbox{\figureprefix~#1:}~#2\par}}
+\newcommand{\figcap}[2]{\par\smallskip{\centering\footnotesize\color{xmugrey}\mbox{\figureprefix~#1:}~#2\par}}
 
 % --- 指标大数字 --------------------------------------------------------------
 % \metric{100\%}{成功率}
 \newcommand{\metric}[2]{%
   \begin{minipage}[t]{0.30\textwidth}\centering
     {\fontsize{22}{24}\selectfont\textbf{\textcolor{emph}{#1}}}\\[0.2em]
-    {\small\color{sustechgrey}#2}
+    {\small\color{xmugrey}#2}
   \end{minipage}}
 
 % --- 要点框 callout（橙色 alertblock）----------------------------------------
@@ -63,7 +64,7 @@
   \begin{minipage}[t][0.80\textheight][t]{0.31\textwidth}\vspace{0pt}%
     #1%
   \end{minipage}%
-  \hfill{\color{sustechgrey}\vrule width 0.5pt}\hfill%
+  \hfill{\color{xmugrey}\vrule width 0.5pt}\hfill%
   \begin{minipage}[t][0.80\textheight][t]{0.62\textwidth}\vspace{0pt}%
     #2%
   \end{minipage}%
@@ -89,10 +90,10 @@
       \noindent\hbox to \textwidth{\hss
       \begin{beamercolorbox}[wd=0.82\textwidth,center,sep=14pt,rounded=true]{vizdivbox}
         \vspace*{2.1em}% 平衡 Part（上方）与 rule+blurb（下方）的高度差，让标题在面板内垂直居中
-        {\color{sustechgrey}\large Part~\thesection}\\[0.5em]
+        {\color{xmugrey}\large Part~\thesection}\\[0.5em]
         {\color{primtext}\Huge\bfseries\insertsectionhead}\\[0.7em]
         {\color{emph}\rule{2cm}{2pt}}\\[0.8em]
-        {\color{sustechink}\normalsize\secblurb}
+        {\color{xmuink}\normalsize\secblurb}
       \end{beamercolorbox}\hss}
       \vfill
     \end{frame}
@@ -102,10 +103,10 @@
       \vspace*{0.045\textheight}% 校正 [plain] 帧体偏上偏移，保证标题严格垂直居中
       \noindent\hbox to \textwidth{\hss
       \parbox{0.82\textwidth}{\centering
-        {\color{sustechgrey}\large Part~\thesection}\\[0.6em]
+        {\color{xmugrey}\large Part~\thesection}\\[0.6em]
         {\color{primtext}\Huge\bfseries\insertsectionhead}\\[0.8em]
         {\color{emph}\rule{2cm}{2pt}}\\[1.0em]
-        {\color{sustechink}\normalsize\secblurb}
+        {\color{xmuink}\normalsize\secblurb}
       }\hss}
       \vfill
     \end{frame}

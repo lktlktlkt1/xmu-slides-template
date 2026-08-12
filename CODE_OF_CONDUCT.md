@@ -18,6 +18,6 @@ We as members, contributors, and leaders pledge to make participation in our com
 
 ## 执行 | Enforcement
 
-违规行为可向维护者举报：yhbcode000@foxmail.com。所有举报将得到及时审阅与调查，并给出必要且适当的回应。
+违规行为可通过仓库的 Security Advisory 向维护者举报。所有举报将得到及时审阅与调查，并给出必要且适当的回应。
 
 本公约改编自 [Contributor Covenant](https://www.contributor-covenant.org) 2.1 版，[https://www.contributor-covenant.org/version/2/1/code_of_conduct/](https://www.contributor-covenant.org/version/2/1/code_of_conduct/)，中文译本参考 [CC 2.1 中文版](https://www.contributor-covenant.org/zh-cn/version/2/1/code_of_conduct/)。

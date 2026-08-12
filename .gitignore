@@ -1,4 +1,5 @@
 # LaTeX build artifacts
+.DS_Store
 *.aux
 *.bbl
 *.bcf

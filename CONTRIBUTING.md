@@ -1,12 +1,12 @@
 # 🤝 贡献指南 | Contributing
 
-感谢你愿意为模板贡献。本仓库是 **SUSTech Beamer 主题 + 幻灯片模板** 的源仓库，也是 `paper-share-skills` 技能包的宿主（`skills/` 子模块）。
+感谢你愿意为模板贡献。本仓库是 **XMU Beamer 主题 + 幻灯片模板** 的源仓库，也是 `paper-share-skills` 技能包的宿主（`skills/` 子模块）。
 
 ## 改动范围
 
 | 位置 | 说明 |
 |:---|:---|
-| `sustech-theme/*.sty` | 主题宏、配色、标题页 / 分节页 / TOC 版式 |
+| `xmu-theme/*.sty` | 主题宏、配色、标题页 / 分节页 / TOC 版式 |
 | `main_template*.tex` | 各场景起手模板（论文分享 / 实验室调研 / 海报） |
 | `latexmkrc` | Windows / macOS 编译路径配置 |
 | `README.md` | 中文优先的双语文档（emoji 分节 + 表格 + `<details>` 面板） |
@@ -22,7 +22,7 @@ latexmk -xelatex main_template.tex
 pdftoppm -png -r 100 main_template.pdf preview
 ```
 
-- 新配色注册为 `\sustechscheme{<name>}`，在 README 配色表同步一行；
+- 新配色注册为 `\xmuscheme{<name>}`；
 - 新增宏需在 README「宏与环境」表格登记；
 - 保持中文优先 + 英文对照的文档风格。
 
