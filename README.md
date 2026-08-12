@@ -55,18 +55,18 @@
 
 ### Skill 来源与本仓库的关系
 
-本仓库通过 `.gitmodules` 记录了原始技能仓库
-[yhbcode000/paper-share-skills](https://github.com/yhbcode000/paper-share-skills)，
-路径为 `skills/`。因此访问本仓库的人能够知道 Skill 的上游来源；但普通的
-`git clone` 不会下载子模块，需要使用：
+本仓库通过 `.gitmodules` 将匹配的 XMU 版技能仓库
+[lktlktlkt1/paper-share-skills](https://github.com/lktlktlkt1/paper-share-skills)
+固定在 `skills/` 子模块中。普通的 `git clone` 不会下载子模块，需要使用：
 
 ```bash
 git clone --recurse-submodules https://github.com/lktlktlkt1/xmu-slides-template.git
 ```
 
-注意：上游 `paper-share-skills` 提供的是原始 SUSTech 工作流；本项目当前使用的 XMU 版 `paper-to-beamer` 是在作者本地修改并接到本仓库的版本，尚未发布到该上游仓库。因此，**只安装上游 Skill 不能保证生成本 README 展示的 XMU 效果**。
-
-后续会将 XMU 版 Skill 单独发布为 `lktlktlkt1/paper-share-skills`，再把本仓库的 `skills` 子模块改为指向该 Fork。届时用户可以一次克隆模板与匹配的 Skill。
+该技能 Fork 基于
+[yhbcode000/paper-share-skills](https://github.com/yhbcode000/paper-share-skills)
+改造，只保留 `arXiv TeX → XMU Beamer → PDF`。它内置 XMU 模板快照，也会优先读取
+`~/xmu-slides-template` 中的最新模板；不包含 MinerU、视频和上传流程。
 
 ### 一次性安装与加载 Skill
 
@@ -85,15 +85,19 @@ git clone --recurse-submodules https://github.com/lktlktlkt1/xmu-slides-template
     └── templates/xmu/
 ```
 
-同时将本仓库克隆到用户主目录，使 `paper-to-beamer` 能找到最新模板：
+递归克隆本仓库后，安装两个子模块中的 Skill：
 
 ```bash
-git clone https://github.com/lktlktlkt1/xmu-slides-template.git ~/xmu-slides-template
+mkdir -p ~/.codex/skills
+cp -R ~/xmu-slides-template/skills/paper-download-arxiv-paper-source ~/.codex/skills/
+cp -R ~/xmu-slides-template/skills/paper-to-beamer ~/.codex/skills/
 ```
 
 复制完成后，重新打开 Codex 或新建一个任务。Codex 会读取各 Skill 的 `SKILL.md`；无需把 Skill 内容粘贴进对话。若要明确指定流程，在提示词中写 `$paper-to-beamer` 即可。
 
-> 当前仓库只发布模板，尚未单独发布上述 XMU 版 Skill 文件夹。因此其他电脑还需要从已配置的电脑复制这两个文件夹；待 Skill 单独发布后，这里会补充公开安装地址。
+也可以直接从
+[lktlktlkt1/paper-share-skills](https://github.com/lktlktlkt1/paper-share-skills)
+克隆并复制这两个技能。安装后重新打开 Codex 或新建对话即可。
 
 ### 开始制作
 
