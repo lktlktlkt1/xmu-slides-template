@@ -64,9 +64,9 @@
 git clone --recurse-submodules https://github.com/lktlktlkt1/xmu-slides-template.git
 ```
 
-需要特别区分：上游 `paper-share-skills` 提供的是原始 SUSTech 工作流；本项目当前使用的 XMU 版 `paper-to-beamer` 是在作者本地修改并接到本仓库的版本，尚未发布到该上游仓库。因此，**只安装上游 Skill 不能保证生成本 README 展示的 XMU 效果**。
+注意：上游 `paper-share-skills` 提供的是原始 SUSTech 工作流；本项目当前使用的 XMU 版 `paper-to-beamer` 是在作者本地修改并接到本仓库的版本，尚未发布到该上游仓库。因此，**只安装上游 Skill 不能保证生成本 README 展示的 XMU 效果**。
 
-后续建议将 XMU 版 Skill 单独发布为 `lktlktlkt1/paper-share-skills`，再把本仓库的 `skills` 子模块改为指向该 Fork。届时其他用户可以一次克隆模板与匹配的 Skill。另一种做法是直接把 Skill 放进本仓库，但会造成模板与 Skill 仓库重复维护。
+后续会将 XMU 版 Skill 单独发布为 `lktlktlkt1/paper-share-skills`，再把本仓库的 `skills` 子模块改为指向该 Fork。届时用户可以一次克隆模板与匹配的 Skill。
 
 ### 一次性安装与加载 Skill
 
