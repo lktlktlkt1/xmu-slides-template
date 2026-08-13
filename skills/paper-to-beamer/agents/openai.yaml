@@ -1,0 +1,4 @@
+interface:
+  display_name: "arXiv to XMU Beamer PDF"
+  short_description: "Create a verified Chinese XMU Beamer PDF"
+  default_prompt: "Use $paper-to-beamer to turn this arXiv paper into a Chinese XMU Beamer presentation and deliver the verified PDF."

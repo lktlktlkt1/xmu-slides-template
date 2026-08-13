@@ -43,6 +43,9 @@
 ├── main_template.tex                 # 可直接修改的示例模板
 ├── main_template.pdf                 # 编译后的预览 PDF
 ├── latexmkrc                         # XeLaTeX 与主题搜索路径配置
+├── skills/                           # 可直接安装的 Codex Skills
+│   ├── paper-download-arxiv-paper-source/
+│   └── paper-to-beamer/
 └── xmu-theme/
     ├── beamerthemexmu.sty            # 主主题与标题页布局
     ├── beamercolorthemexmu.sty       # XMU 配色
@@ -55,18 +58,20 @@
 
 ### Skill 来源与本仓库的关系
 
-本仓库通过 `.gitmodules` 将匹配的 XMU 版技能仓库
-[lktlktlkt1/paper-share-skills](https://github.com/lktlktlkt1/paper-share-skills)
-固定在 `skills/` 子模块中。普通的 `git clone` 不会下载子模块，需要使用：
+本仓库已将两个匹配的 XMU 版 Skill **直接内置为普通目录**，可以在
+[`skills/`](skills/) 中直接查看。普通 `git clone` 会一起下载完整 Skill，不再需要
+Git 子模块或 `--recurse-submodules`：
 
 ```bash
-git clone --recurse-submodules https://github.com/lktlktlkt1/xmu-slides-template.git
+git clone https://github.com/lktlktlkt1/xmu-slides-template.git
 ```
 
-该技能 Fork 基于
+内置 Skill 同步自
+[lktlktlkt1/paper-share-skills](https://github.com/lktlktlkt1/paper-share-skills)；该技能 Fork 基于
 [yhbcode000/paper-share-skills](https://github.com/yhbcode000/paper-share-skills)
 改造，只保留 `arXiv TeX → XMU Beamer → PDF`。它内置 XMU 模板快照，也会优先读取
 `~/xmu-slides-template` 中的最新模板；不包含 MinerU、视频和上传流程。
+这里保存的是方便直接安装的同步副本，不是会自动跟随源仓库更新的实时链接。
 
 ### 一次性安装与加载 Skill
 
@@ -85,7 +90,7 @@ git clone --recurse-submodules https://github.com/lktlktlkt1/xmu-slides-template
     └── templates/xmu/
 ```
 
-递归克隆本仓库后，安装两个子模块中的 Skill：
+克隆本仓库后，安装内置的两个 Skill：
 
 ```bash
 mkdir -p ~/.codex/skills

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Download arXiv TeX Source"
+  short_description: "Download and unpack arXiv TeX for XMU slides"
+  default_prompt: "Use $paper-download-arxiv-paper-source to download and unpack this arXiv paper's TeX source."

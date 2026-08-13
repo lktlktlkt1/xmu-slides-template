@@ -1,0 +1,105 @@
+% beamercolorthemexmu.sty
+% Original theme: 杨昊波 (Haobo Yang), Apache-2.0.
+% XMU modification: 李坤泰 (lktlktlkt1), 2026.
+% COLOR-ONLY theme recoloring Madrid. Use on top of Madrid:
+%     \usetheme{Madrid}
+%     \usecolortheme{xmu}
+%
+% 调色板（厦大校徽深蓝 + 海洋蓝 + 金色强调 + 白底）
+%   主色 深蓝 #112D66 / #1C4D8C / #4C78A8 —— 标题、section、框架、图表
+%   强调 金色 #C69214 / #E8C15A           —— 关键词、结论、重要数字
+%   辅色 青灰/浅灰 #587B8A / #E8EDF4 / #F5F7FA —— 背景区块、辅助信息
+%   背景 白   #FFFFFF
+%   正文 深灰 #323236
+\ProvidesPackage{beamercolorthemexmu}[2026/08/12 XMU academic palette for Madrid]
+
+\RequirePackage{xcolor}
+
+% --- 调色板 ------------------------------------------------------------------
+% 主色：蓝
+\definecolor{xmublue}{HTML}{112D66}    % 厦大校徽深蓝（主标题 / 主结构）
+\definecolor{xmublue2}{HTML}{1C4D8C}   % 海洋蓝（结构线 / 层级）
+\definecolor{xmublue3}{HTML}{4C78A8}   % 柔和蓝（辅助图表）
+\definecolor{xmubluelt}{HTML}{DCE7F5}  % 极浅蓝（深底上的副标题文字）
+% 强调：金
+\definecolor{xmuorange}{HTML}{C69214}  % 金色（主强调）
+\definecolor{xmugold}{HTML}{E8C15A}    % 浅金（次强调 / highlight）
+\definecolor{xmuorlt}{HTML}{FCF4DC}    % 浅金底（强调块体）
+% 辅色：灰绿 / 浅灰
+\definecolor{xmugreen}{HTML}{587B8A}   % 青灰（冷静辅助）
+\definecolor{cardgrey}{HTML}{E8EDF4}   % 浅蓝灰（分割 / 卡片背景）
+\definecolor{bgsoft}{HTML}{F5F7FA}     % 更浅背景灰（区块层次）
+% 中性文字
+\definecolor{xmuink}{HTML}{252A34}     % 正文深灰
+\definecolor{xmugrey}{HTML}{6B7280}    % 次级文字灰
+
+% --- 语义角色别名（样式层只引用 emph/kw/hdr 与角色色名，不感知具体色值）-----
+% 由本颜色层统一映射；配色方案切换时重新映射（\colorlet 是快照）。
+\colorlet{emph}{xmuorange}   % 强调（关键词 / 列表 / callout）
+\colorlet{kw}{xmuorange}     % 关键词（同强调）
+\colorlet{hdr}{xmublue}      % 表头底色行
+\colorlet{thc}{white}            % 表头文字（默认白；official 方案改黑）
+\colorlet{primtext}{xmublue} % 白底上的主色文字（章节分隔页标题等）
+
+% --- 基础 --------------------------------------------------------------------
+\setbeamercolor{normal text}{fg=xmuink,bg=white}
+\setbeamercolor{structure}{fg=primtext}       % 结构默认走主色（白底可读版）
+\setbeamercolor{alerted text}{fg=xmuorange}
+\setbeamercolor{example text}{fg=xmugreen}
+
+% --- Madrid 页脚 / 页眉三段色块（蓝色渐变：深 -> 标准 -> 柔和）----------------
+\setbeamercolor{palette primary}{fg=white,bg=xmublue}
+\setbeamercolor{palette secondary}{fg=white,bg=xmublue2}
+\setbeamercolor{palette tertiary}{fg=white,bg=xmublue3}
+\setbeamercolor{palette quaternary}{fg=white,bg=xmublue}
+\setbeamercolor{author in head/foot}{fg=white,bg=xmublue}
+\setbeamercolor{title in head/foot}{fg=white,bg=xmublue2}
+\setbeamercolor{date in head/foot}{fg=white,bg=xmublue3}
+
+% --- 标题 / frametitle（主蓝结构）-------------------------------------------
+\setbeamercolor{title}{fg=white,bg=xmublue}
+\setbeamercolor{subtitle}{fg=xmubluelt}
+\setbeamercolor{frametitle}{fg=white,bg=xmublue}
+\setbeamercolor{framesubtitle}{fg=xmuorange}
+
+% --- 章节 / Part 标题（主蓝）------------------------------------------------
+\setbeamercolor{section title}{fg=xmublue}
+\setbeamercolor{part title}{fg=xmublue}
+\setbeamercolor{section in toc}{fg=xmuink}
+
+% --- 列表标记 / 编号（橙色强调）---------------------------------------------
+\setbeamercolor{itemize item}{fg=xmuorange}
+\setbeamercolor{itemize subitem}{fg=xmuorange}
+\setbeamercolor{itemize subsubitem}{fg=xmugrey}
+\setbeamercolor{enumerate item}{fg=xmuorange}
+\setbeamercolor{enumerate subitem}{fg=xmuorange}
+
+% --- 块 ----------------------------------------------------------------------
+% 普通 block：标准学术蓝标题（结构），极浅灰底
+\setbeamercolor{block title}{fg=white,bg=xmublue2}
+\setbeamercolor{block body}{fg=xmuink,bg=bgsoft}
+% alertblock（callout 要点框）：橙标题（强调），浅橙底
+\setbeamercolor{block title alerted}{fg=white,bg=xmuorange}
+\setbeamercolor{block body alerted}{fg=xmuink,bg=xmuorlt}
+% exampleblock：灰绿标题（辅助），浅灰底
+\setbeamercolor{block title example}{fg=white,bg=xmugreen}
+\setbeamercolor{block body example}{fg=xmuink,bg=cardgrey}
+
+% --- 图注 --------------------------------------------------------------------
+\setbeamercolor{caption name}{fg=xmuorange}
+
+% --- 可选配色方案 ------------------------------------------------------------
+% 用法（在 \usetheme{xmu} 之后调用）：
+%   \xmuscheme{default}  默认蓝色学术风（加载时已生效，无需调用）
+% 新增方案 = 新增一个 \xmu@palette@<name> 宏（重定义调色板 + 重发别名）。
+\newcommand{\xmuscheme}[1]{%
+  \ifcsname xmu@palette@#1\endcsname
+    \csname xmu@palette@#1\endcsname
+  \else
+    \PackageError{beamercolorthemexmu}{Unknown color scheme '#1'}%
+      {Available scheme: default}%
+  \fi
+}
+% 默认蓝色学术风（加载时已应用；无操作）
+\newcommand{\xmu@palette@default}{}
+\mode<all>
